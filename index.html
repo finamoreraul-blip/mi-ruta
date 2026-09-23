@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MiRuta BSAS + Reportes</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<style>body{margin:0;font-family:Arial}#map{height:60vh}.panel{padding:10px}input,button{width:100%;padding:10px;margin:4px 0;border-radius:8px}button{background:#1a73e8;color:#fff;border:none}.rep{background:#ff9800;width:23%;font-size:12px}</style>
+</head>
+<body>
+<div class="panel">
+<input id="origen" value="Tres Arroyos, Buenos Aires">
+<input id="destino" value="Bahia Blanca, Buenos Aires">
+<button onclick="buscarRuta()">Buscar rutas</button>
+<div>
+<button class="rep" onclick="reportar('🕳️ Pozo')">🕳️ Pozo</button>
+<button class="rep" onclick="reportar('🚧 Corte')">🚧 Corte</button>
+<button class="rep" onclick="reportar('🐄 Animal')">🐄 Animal</button>
+<button class="rep" onclick="reportar('🌫️ Niebla')">🌫️ Niebla</button>
+</div>
+<p id="info"></p>
+</div>
+<div id="map"></div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+var map=L.map('map').setView([-37.5,-60.5],6);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19}).addTo(map);
+var capaRutas=L.layerGroup().addTo(map);
+var capaRep=L.layerGroup().addTo(map);
+
+// cargar reportes guardados
+var reportes=JSON.parse(localStorage.getItem('reportes')||'[]');
+reportes.forEach(r=>L.marker([r.lat,r.lng]).addTo(capaRep).bindPopup(r.t+"<br>"+r.hora));
+
+async function geocode(q){let r=await fetch('https://nominatim.openstreetmap.org/search?format=json&q='+encodeURIComponent(q));let j=await r.json();return [j[0].lat,j[0].lon];}
+async function buscarRuta(){
+ capaRutas.clearLayers();
+ let o=await geocode(origen.value), d=await geocode(destino.value);
+ let url=`https://router.project-osrm.org/route/v1/driving/${o[1]},${o[0]};${d[1]},${d[0]}?overview=full&geometries=geojson&alternatives=2`;
+ let j=await (await fetch(url)).json();
+ j.routes.forEach((rt,i)=>{
+  L.geoJSON(rt.geometry,{style:{color:i==0?'blue':'green',weight:5}}).addTo(capaRutas);
+ });
+ map.fitBounds(capaRutas.getBounds());
+ info.innerHTML="2 rutas dibujadas. Azul: más rápida. Verde: alternativa. Revisá reportes en el mapa.";
+}
+function reportar(t){
+ navigator.geolocation.getCurrentPosition(p=>{
+  let r={lat:p.coords.latitude,lng:p.coords.longitude,t:t,hora:new Date().toLocaleString()};
+  reportes.push(r); localStorage.setItem('reportes',JSON.stringify(reportes));
+  L.marker([r.lat,r.lng]).addTo(capaRep).bindPopup(t+"<br>"+r.hora).openPopup();
+  info.innerHTML="Reporte guardado: "+t;
+ });
+}
+</script>
+</body>
+</html>
