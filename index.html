@@ -3,86 +3,98 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>MiRuta</title>
+<title>MiRuta Completo</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <style>
-*{box-sizing:border-box} html,body{margin:0;height:100%;font-family:Arial}
-#map{height:100vh;width:100%;z-index:1;touch-action:none;background:#202020}
-.leaflet-container{touch-action:none;background:#202020}
-.buscador{position:absolute;top:10px;left:10px;right:10px;z-index:1000;background:white;border-radius:12px;padding:8px;box-shadow:0 2px 8px rgba(0,0,0,.3);display:flex;gap:6px}
-.buscador input{flex:1;padding:8px;font-size:14px;border:1px solid #ddd;border-radius:8px;min-width:0}
-.buscador button{padding:8px 12px;border:none;border-radius:8px;background:#1a73e8;color:white}
-.fab{position:absolute;z-index:1000;border:none;border-radius:50%;width:44px;height:44px;font-size:20px;box-shadow:0 2px 6px rgba(0,0,0,.3);background:white}
-#btnGPS{bottom:90px;right:12px} #btnSat{bottom:145px;right:12px;background:#333;color:white;font-size:18px} #btnRep{bottom:20px;right:12px;background:#ff9800;color:white}
-.panel-rep{position:absolute;bottom:70px;right:12px;z-index:1001;background:white;border-radius:12px;padding:8px;display:none;box-shadow:0 2px 8px rgba(0,0,0,.3)}
-.panel-rep button{display:block;width:140px;margin:4px 0;padding:8px;border:none;border-radius:8px;background:#f5f5f5}
-.info{position:absolute;bottom:10px;left:10px;z-index:1000;background:white;padding:8px 10px;border-radius:10px;font-size:13px;max-width:68%;box-shadow:0 2px 6px rgba(0,0,0,.3)}
-.zona-label{background:rgba(255,152,0,.92);color:#fff;border:none;border-radius:6px;padding:2px 6px;font-size:12px;box-shadow:none}
-.zona-label:before{display:none}
+*{box-sizing:border-box}html,body{margin:0;height:100%;font-family:Roboto,Arial}
+#map{height:100vh;width:100%;background:#202020}
+.buscador{position:absolute;top:10px;left:10px;right:10px;z-index:1000;background:#fff;border-radius:14px;padding:10px;box-shadow:0 2px 10px rgba(0,0,0,.3);max-height:75vh;overflow:auto}
+.buscador input,.buscador select{width:100%;padding:10px;margin:4px 0;border:1px solid #ddd;border-radius:10px;font-size:15px}
+.fila2{display:flex;gap:6px}.fila2>div{flex:1}
+.fila{display:flex;gap:6px;margin-top:6px}.fila button{flex:1;padding:11px;border:none;border-radius:10px;font-size:15px}
+.btn-ir{background:#1a73e8;color:#fff}.btn-gps{background:#f1f3f4}
+.ruta-info{display:none;margin-top:8px;border-top:1px solid #eee;padding-top:8px}
+.ruta-card{padding:10px;border-radius:10px;margin:6px 0;background:#f8f9fa;border-left:6px solid #1a73e8}
+.alerta{background:#fff3cd;border:1px solid #ff9800;border-radius:10px;padding:8px;margin:6px 0;font-size:14px}
+.fab{position:absolute;z-index:1000;border:none;border-radius:50%;width:44px;height:44px;font-size:20px;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.3)}
+#btnSat{bottom:20px;right:12px;background:#333;color:#fff}#btnRep{bottom:70px;right:12px;background:#ff9800;color:#fff}
+.panel-rep{position:absolute;bottom:120px;right:12px;z-index:1001;background:#fff;border-radius:12px;padding:8px;display:none;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+.panel-rep button{display:block;width:150px;margin:4px 0;padding:9px;border:none;border-radius:8px;background:#f5f5f5;font-size:14px}
+.zona-label{background:#ff9800;color:#fff;border:none;border-radius:6px;padding:2px 6px;font-size:12px}
 </style>
 </head>
 <body>
 <div id="map"></div>
 <div class="buscador">
-<input id="origenTxt" value="Tres Arroyos" placeholder="Origen">
-<input id="destinoTxt" value="Coronel Pringles" placeholder="Destino">
-<button onclick="buscarRuta()">Ir</button>
+<input id="origenTxt" value="Tres Arroyos" placeholder="📍 Origen">
+<input id="destinoTxt" value="Coronel Pringles" placeholder="🏁 Destino">
+<div class="fila2">
+<div><label style="font-size:13px">Velocidad</label>
+<select id="vel"><option value="60">60 km/h Camión</option><option value="80">80 km/h Tranquilo</option><option value="100" selected>100 km/h Normal</option><option value="110">110 km/h Rápido</option><option value="120">120 km/h Máx</option></select></div>
+<div><label style="font-size:13px">Hora salida</label><input type="time" id="horaSal" value="08:00"></div>
 </div>
-<button id="btnGPS" class="fab" onclick="usarGPS()">📍</button>
+<div class="fila"><button class="btn-gps" onclick="usarGPS()">📍 Mi ubicación</button><button class="btn-ir" onclick="buscarRuta()">Cómo llegar</button></div>
+<div id="rutaInfo" class="ruta-info"></div>
+</div>
 <button id="btnSat" class="fab" onclick="cambiarVista()">🛰️</button>
 <button id="btnRep" class="fab" onclick="toggleRep()">⚠️</button>
 <div id="panelRep" class="panel-rep">
 <button onclick="reportar('🕳️ Pozo')">🕳️ Pozo</button>
 <button onclick="reportar('🌫️ Niebla')">🌫️ Niebla</button>
-<button onclick="reportar('🐄 Animal')">🐄 Animal</button>
+<button onclick="reportar('🐄 Animal suelto')">🐄 Animal</button>
 <button onclick="reportar('🚧 Corte')">🚧 Corte</button>
+<button onclick="reportar('🌧️ Lluvia')">🌧️ Lluvia</button>
 </div>
-<div id="infoBox" class="info">Poné origen/destino y dale Ir</div>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-var osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,keepBuffer:8});
-var sat = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,maxNativeZoom:18,detectRetina:true,keepBuffer:8,updateWhenIdle:false});
-var map = L.map('map',{layers:[osm],zoomControl:false}).setView([-38.2,-60.7],9);
+var osm=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19});
+var sat=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,maxNativeZoom:18,detectRetina:true,keepBuffer:8});
+var map=L.map('map',{layers:[osm],zoomControl:false}).setView([-38.2,-60.7],9);
 L.control.zoom({position:'bottomleft'}).addTo(map);
-map.touchZoom.enable(); map.dragging.enable(); map.scrollWheelZoom.enable(); map.doubleClickZoom.enable();
-var esSat=false; var capaRutas=L.layerGroup().addTo(map); var capaRep=L.layerGroup().addTo(map); var miPos=null;
-function cambiarVista(){ if(esSat){map.removeLayer(sat);map.addLayer(osm);}else{map.removeLayer(osm);map.addLayer(sat);} esSat=!esSat; }
-function toggleRep(){var p=document.getElementById('panelRep');p.style.display=p.style.display=='block'?'none':'block';}
+var esSat=false,capaRutas=L.layerGroup().addTo(map),capaRep=L.layerGroup().addTo(map),miPos=null;
+function cambiarVista(){esSat?(map.removeLayer(sat),map.addLayer(osm)):(map.removeLayer(osm),map.addLayer(sat));esSat=!esSat;}
+function toggleRep(){let p=document.getElementById('panelRep');p.style.display=p.style.display=='block'?'none':'block';}
+// ZONAS PELIGROSAS
 var zonas=[
-{lat:-38.25,lng:-60.9,t:"Niebla frecuente",d:"Bajo con niebla densa 5-9 AM. Reducí a 60 km/h."},
-{lat:-38.05,lng:-61.1,t:"Animales sueltos",d:"Tramo RP85 con animales. Máx 80 de noche."},
-{lat:-37.95,lng:-60.6,t:"Pozos graves",d:"12 reportes de pozos. Precaución."}
+{lat:-38.25,lng:-60.9,t:"Niebla frecuente",d:"Bajo con niebla densa 5-9 AM. Reducí a 60 km/h, usá balizas.",tipo:"niebla"},
+{lat:-38.05,lng:-61.1,t:"Animales sueltos",d:"RP85 con animales sueltos. Peligro nocturno 19-06h.",tipo:"animal"},
+{lat:-37.95,lng:-60.65,t:"Pozos graves",d:"12 reportes. Máx 80 km/h.",tipo:"pozo"}
 ];
-zonas.forEach(z=>{
- var c=L.circle([z.lat,z.lng],{radius:4000,color:'orange',weight:2,fillOpacity:0.15}).addTo(map);
- c.bindPopup("<b>⚠️ "+z.t+"</b><br>"+z.d);
- map.on('zoomend',()=>{
-  if(map.getZoom()>=11){c.bindTooltip(z.t,{permanent:true,direction:'center',className:'zona-label'}).openTooltip();}
-  else{c.unbindTooltip();}
- });
-});
-var reps=JSON.parse(localStorage.getItem('reps')||'[]');
-reps.forEach(r=>L.marker([r.lat,r.lng]).addTo(capaRep).bindPopup(r.tipo));
-function usarGPS(){navigator.geolocation.getCurrentPosition(p=>{miPos=[p.coords.latitude,p.coords.longitude];map.setView(miPos,13);L.marker(miPos).addTo(map).bindPopup("Estás aquí").openPopup();});}
-async function getCoords(t){var r=await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q='+encodeURIComponent(t+", Buenos Aires, Argentina"));var j=await r.json();if(!j.length)throw"no";return[parseFloat(j[0].lat),parseFloat(j[0].lon)];}
+zonas.forEach(z=>{var c=L.circle([z.lat,z.lng],{radius:4500,color:z.tipo=='animal'?'red':'orange',weight:2,fillOpacity:0.18}).addTo(map);c.bindPopup(`<b>⚠️ ${z.t}</b><br>${z.d}`);map.on('zoomend',()=>{map.getZoom()>=11?c.bindTooltip(z.t,{permanent:true,direction:'center',className:'zona-label'}).openTooltip():c.unbindTooltip();});});
+var reps=JSON.parse(localStorage.getItem('reps')||'[]');reps.forEach(r=>L.marker([r.lat,r.lng]).addTo(capaRep).bindPopup(r.tipo+"<br>"+(r.hora||'')));
+function usarGPS(){navigator.geolocation.getCurrentPosition(p=>{miPos=[p.coords.latitude,p.coords.longitude];origenTxt.value="Mi ubicación";L.marker(miPos).addTo(map).bindPopup("Estás aquí").openPopup();map.setView(miPos,13);});}
+async function getCoords(t){if(t=="Mi ubicación"&&miPos)return miPos;let r=await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q='+encodeURIComponent(t+", Buenos Aires, Argentina"));let j=await r.json();if(!j[0])throw 0;return[parseFloat(j[0].lat),parseFloat(j[0].lon)];}
 async function buscarRuta(){
- var box=document.getElementById('infoBox'); box.innerHTML="Buscando...";
- try{
-  var o=await getCoords(document.getElementById('origenTxt').value);
-  var d=await getCoords(document.getElementById('destinoTxt').value);
-  var url=`https://router.project-osrm.org/route/v1/driving/${o[1]},${o[0]};${d[1]},${d[0]}?overview=full&geometries=geojson&alternatives=2`;
-  var r=await fetch(url); var j=await r.json();
-  if(!j.routes||!j.routes.length)throw"noroute";
-  capaRutas.clearLayers(); var html="";
-  j.routes.slice(0,2).forEach((rt,i)=>{var col=i==0?'#1a73e8':'#0f9d58';L.geoJSON(rt.geometry,{style:{color:col,weight:5}}).addTo(capaRutas);html+=`<b style="color:${col}">R${i+1}</b> ${(rt.distance/1000).toFixed(0)}km ${(rt.duration/60).toFixed(0)}min `;});
-  box.innerHTML=html+"<br>Azul rápida / Verde alternativa";
-  map.fitBounds(capaRutas.getBounds(),{padding:[30,30]});
- }catch(e){box.innerHTML="No se encontró. Probá con internet y nombres simples.";}
+let vel=parseInt(document.getElementById('vel').value),horaSal=document.getElementById('horaSal').value;
+let [h,m]=horaSal.split(':').map(Number);
+let box=document.getElementById('rutaInfo');box.style.display='block';box.innerHTML='Buscando...';
+try{
+let o=await getCoords(origenTxt.value),d=await getCoords(destinoTxt.value);
+let r=await fetch(`https://router.project-osrm.org/route/v1/driving/${o[1]},${o[0]};${d[1]},${d[0]}?overview=full&geometries=geojson&alternatives=2`);
+let j=await r.json();capaRutas.clearLayers();let html='';
+j.routes.slice(0,2).forEach((rt,i)=>{
+let km=rt.distance/1000,minTot=Math.round(km/vel*60);
+let lleg=h*60+m+minTot,lh=Math.floor(lleg/60)%24,lm=lleg%60;
+let llegada=String(lh).padStart(2,'0')+':'+String(lm).padStart(2,'0');
+let col=i==0?'#1a73e8':'#0f9d58';
+L.geoJSON(rt.geometry,{style:{color:col,weight:6}}).addTo(capaRutas);
+// alertas inteligentes
+let alertas='';
+let esNoche=lh>=19||lh<6;
+if(esNoche) alertas+=`<div class="alerta">🌙 Vas a circular de noche (${llegada}). <b>Peligro animales sueltos</b> en RP85. Reducí a 80 km/h.</div>`;
+if(h>=5&&h<=9) alertas+=`<div class="alerta">🌫️ Salís en horario de niebla (5-9 AM). Zona de niebla en el bajo.</div>`;
+if(vel>100) alertas+=`<div class="alerta">⚠️ A ${vel} km/h hay pozos reportados. Recomendado 80-100.</div>`;
+html+=`<div class="ruta-card" style="border-left-color:${col}"><b style="font-size:18px">${km.toFixed(1)} km</b> · ${Math.floor(minTot/60)>0?Math.floor(minTot/60)+' h ':''}${minTot%60} min<div style="margin-top:6px;font-size:14px">🚗 Salida: <b>${horaSal}</b> a ${vel} km/h<br>🏁 Llegada estimada: <b>${llegada}</b><br>⏱️ Duración: ${minTot} min<br><span style="color:#666">${i==0?'Ruta principal':'Ruta alternativa'} · Estado: ${i==0?'Regular':'Bueno'}</span></div></div>${alertas}`;
+});
+box.innerHTML=html||'Sin rutas';map.fitBounds(capaRutas.getBounds(),{padding:[30,30]});
+localStorage.setItem('ultima',JSON.stringify({o:origenTxt.value,d:destinoTxt.value}));
+}catch(e){box.innerHTML='No se encontró ruta. Revisá nombres y conexión.';}
 }
 function reportar(tipo){
- navigator.geolocation.getCurrentPosition(p=>{var r={lat:p.coords.latitude,lng:p.coords.longitude,tipo:tipo};reps.push(r);localStorage.setItem('reps',JSON.stringify(reps));L.marker([r.lat,r.lng]).addTo(capaRep).bindPopup(tipo).openPopup();document.getElementById('panelRep').style.display='none';},
- ()=>{var c=map.getCenter();var r={lat:c.lat,lng:c.lng,tipo:tipo};reps.push(r);localStorage.setItem('reps',JSON.stringify(reps));L.marker([c.lat,c.lng]).addTo(capaRep).bindPopup(tipo).openPopup();});
+let save=(lat,lng)=>{let r={lat,lng,tipo,hora:new Date().toLocaleString()};let rs=JSON.parse(localStorage.getItem('reps')||'[]');rs.push(r);localStorage.setItem('reps',JSON.stringify(rs));L.marker([lat,lng]).addTo(capaRep).bindPopup(`<b>${tipo}</b><br>${r.hora}`).openPopup();toggleRep();};
+navigator.geolocation.getCurrentPosition(p=>save(p.coords.latitude,p.coords.longitude),()=>{let c=map.getCenter();save(c.lat,c.lng);});
 }
+let u=JSON.parse(localStorage.getItem('ultima')||'null');if(u){origenTxt.value=u.o;destinoTxt.value=u.d;}
 </script>
 </body>
 </html>
