@@ -7,116 +7,81 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <style>
 *{box-sizing:border-box} html,body{margin:0;height:100%;font-family:Arial}
-#map{height:100vh;width:100%;z-index:1}
+#map{height:100vh;width:100%;z-index:1;touch-action:none;background:#202020}
+.leaflet-container{touch-action:none;background:#202020}
 .buscador{position:absolute;top:10px;left:10px;right:10px;z-index:1000;background:white;border-radius:12px;padding:8px;box-shadow:0 2px 8px rgba(0,0,0,.3);display:flex;gap:6px}
-.buscador input{flex:1;padding:8px;font-size:14px;border:1px solid #ddd;border-radius:8px}
-.buscador button{padding:8px 10px;border:none;border-radius:8px;background:#1a73e8;color:white;font-size:14px}
+.buscador input{flex:1;padding:8px;font-size:14px;border:1px solid #ddd;border-radius:8px;min-width:0}
+.buscador button{padding:8px 12px;border:none;border-radius:8px;background:#1a73e8;color:white}
 .fab{position:absolute;z-index:1000;border:none;border-radius:50%;width:44px;height:44px;font-size:20px;box-shadow:0 2px 6px rgba(0,0,0,.3);background:white}
-#btnGPS{bottom:90px;right:12px}
-#btnSat{bottom:140px;right:12px;background:#333;color:white;font-size:16px}
-#btnRep{bottom:20px;right:12px;background:#ff9800;color:white}
+#btnGPS{bottom:90px;right:12px} #btnSat{bottom:145px;right:12px;background:#333;color:white;font-size:18px} #btnRep{bottom:20px;right:12px;background:#ff9800;color:white}
 .panel-rep{position:absolute;bottom:70px;right:12px;z-index:1001;background:white;border-radius:12px;padding:8px;display:none;box-shadow:0 2px 8px rgba(0,0,0,.3)}
-.panel-rep button{display:block;width:100%;margin:4px 0;padding:8px;border:none;border-radius:8px;background:#f5f5f5;font-size:14px}
-.info{position:absolute;bottom:10px;left:10px;z-index:1000;background:white;padding:8px 10px;border-radius:10px;font-size:13px;max-width:70%;box-shadow:0 2px 6px rgba(0,0,0,.3)}
+.panel-rep button{display:block;width:140px;margin:4px 0;padding:8px;border:none;border-radius:8px;background:#f5f5f5}
+.info{position:absolute;bottom:10px;left:10px;z-index:1000;background:white;padding:8px 10px;border-radius:10px;font-size:13px;max-width:68%;box-shadow:0 2px 6px rgba(0,0,0,.3)}
+.zona-label{background:rgba(255,152,0,.92);color:#fff;border:none;border-radius:6px;padding:2px 6px;font-size:12px;box-shadow:none}
+.zona-label:before{display:none}
 </style>
 </head>
 <body>
 <div id="map"></div>
-
 <div class="buscador">
 <input id="origenTxt" value="Tres Arroyos" placeholder="Origen">
 <input id="destinoTxt" value="Coronel Pringles" placeholder="Destino">
 <button onclick="buscarRuta()">Ir</button>
 </div>
-
 <button id="btnGPS" class="fab" onclick="usarGPS()">📍</button>
 <button id="btnSat" class="fab" onclick="cambiarVista()">🛰️</button>
 <button id="btnRep" class="fab" onclick="toggleRep()">⚠️</button>
-
 <div id="panelRep" class="panel-rep">
 <button onclick="reportar('🕳️ Pozo')">🕳️ Pozo</button>
 <button onclick="reportar('🌫️ Niebla')">🌫️ Niebla</button>
 <button onclick="reportar('🐄 Animal')">🐄 Animal</button>
 <button onclick="reportar('🚧 Corte')">🚧 Corte</button>
 </div>
-
-<div id="infoBox" class="info">Escribí origen/destino y dale Ir</div>
-
+<div id="infoBox" class="info">Poné origen/destino y dale Ir</div>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-var osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19});
-var sat = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:19});
-var map = L.map('map',{layers:[osm], zoomControl:false}).setView([-38.2,-60.7],9);
+var osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,keepBuffer:8});
+var sat = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,maxNativeZoom:18,detectRetina:true,keepBuffer:8,updateWhenIdle:false});
+var map = L.map('map',{layers:[osm],zoomControl:false}).setView([-38.2,-60.7],9);
 L.control.zoom({position:'bottomleft'}).addTo(map);
-var esSat=false;
-var capaRutas=L.layerGroup().addTo(map);
-var capaRep=L.layerGroup().addTo(map);
-var miPos=null;
-
-function cambiarVista(){
- if(esSat){map.removeLayer(sat);map.addLayer(osm);}else{map.removeLayer(osm);map.addLayer(sat);}
- esSat=!esSat;
-}
-function toggleRep(){
- var p=document.getElementById('panelRep');
- p.style.display=p.style.display=='block'?'none':'block';
-}
-// zonas fijas
-[[-38.25,-60.9,"Niebla frecuente"],[-38.05,-61.1,"Animales sueltos"]].forEach(z=>{
- L.circle([z[0],z[1]],{radius:4000,color:'orange',fillOpacity:0.2}).addTo(map).bindPopup("⚠️ "+z[2]);
+map.touchZoom.enable(); map.dragging.enable(); map.scrollWheelZoom.enable(); map.doubleClickZoom.enable();
+var esSat=false; var capaRutas=L.layerGroup().addTo(map); var capaRep=L.layerGroup().addTo(map); var miPos=null;
+function cambiarVista(){ if(esSat){map.removeLayer(sat);map.addLayer(osm);}else{map.removeLayer(osm);map.addLayer(sat);} esSat=!esSat; }
+function toggleRep(){var p=document.getElementById('panelRep');p.style.display=p.style.display=='block'?'none':'block';}
+var zonas=[
+{lat:-38.25,lng:-60.9,t:"Niebla frecuente",d:"Bajo con niebla densa 5-9 AM. Reducí a 60 km/h."},
+{lat:-38.05,lng:-61.1,t:"Animales sueltos",d:"Tramo RP85 con animales. Máx 80 de noche."},
+{lat:-37.95,lng:-60.6,t:"Pozos graves",d:"12 reportes de pozos. Precaución."}
+];
+zonas.forEach(z=>{
+ var c=L.circle([z.lat,z.lng],{radius:4000,color:'orange',weight:2,fillOpacity:0.15}).addTo(map);
+ c.bindPopup("<b>⚠️ "+z.t+"</b><br>"+z.d);
+ map.on('zoomend',()=>{
+  if(map.getZoom()>=11){c.bindTooltip(z.t,{permanent:true,direction:'center',className:'zona-label'}).openTooltip();}
+  else{c.unbindTooltip();}
+ });
 });
-// reportes guardados
 var reps=JSON.parse(localStorage.getItem('reps')||'[]');
 reps.forEach(r=>L.marker([r.lat,r.lng]).addTo(capaRep).bindPopup(r.tipo));
-
-function usarGPS(){
- navigator.geolocation.getCurrentPosition(p=>{
-  miPos=[p.coords.latitude,p.coords.longitude];
-  map.setView(miPos,13);
-  L.marker(miPos).addTo(map).bindPopup("Estás aquí").openPopup();
- });
-}
-
-async function getCoords(t){
- var q=encodeURIComponent(t+", Buenos Aires, Argentina");
- var r=await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q='+q);
- var j=await r.json();
- if(!j.length) throw "no";
- return [parseFloat(j[0].lat), parseFloat(j[0].lon)];
-}
-
+function usarGPS(){navigator.geolocation.getCurrentPosition(p=>{miPos=[p.coords.latitude,p.coords.longitude];map.setView(miPos,13);L.marker(miPos).addTo(map).bindPopup("Estás aquí").openPopup();});}
+async function getCoords(t){var r=await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q='+encodeURIComponent(t+", Buenos Aires, Argentina"));var j=await r.json();if(!j.length)throw"no";return[parseFloat(j[0].lat),parseFloat(j[0].lon)];}
 async function buscarRuta(){
- var box=document.getElementById('infoBox');
- box.innerHTML="Buscando...";
+ var box=document.getElementById('infoBox'); box.innerHTML="Buscando...";
  try{
-  var oTxt=document.getElementById('origenTxt').value;
-  var dTxt=document.getElementById('destinoTxt').value;
-  var o = (miPos && oTxt.includes("Mi "))? miPos : await getCoords(oTxt);
-  var d = await getCoords(dTxt);
+  var o=await getCoords(document.getElementById('origenTxt').value);
+  var d=await getCoords(document.getElementById('destinoTxt').value);
   var url=`https://router.project-osrm.org/route/v1/driving/${o[1]},${o[0]};${d[1]},${d[0]}?overview=full&geometries=geojson&alternatives=2`;
   var r=await fetch(url); var j=await r.json();
-  if(!j.routes ||!j.routes.length) throw "noroute";
-  capaRutas.clearLayers();
-  var html="";
-  j.routes.slice(0,2).forEach((rt,i)=>{
-   var col=i==0?'#1a73e8':'#0f9d58';
-   L.geoJSON(rt.geometry,{style:{color:col,weight:5}}).addTo(capaRutas);
-   html+=`<b style="color:${col}">R${i+1}</b> ${(rt.distance/1000).toFixed(0)}km ${(rt.duration/60).toFixed(0)}min | `;
-  });
-  box.innerHTML=html+"<br>Azul: rápida (80km/h) Verde: alt (100km/h)";
-  map.fitBounds(capaRutas.getBounds(),{padding:[40,40]});
- }catch(e){
-  box.innerHTML="No se encontró ruta. Probá solo 'Tres Arroyos' y 'Coronel Pringles' con internet.";
- }
+  if(!j.routes||!j.routes.length)throw"noroute";
+  capaRutas.clearLayers(); var html="";
+  j.routes.slice(0,2).forEach((rt,i)=>{var col=i==0?'#1a73e8':'#0f9d58';L.geoJSON(rt.geometry,{style:{color:col,weight:5}}).addTo(capaRutas);html+=`<b style="color:${col}">R${i+1}</b> ${(rt.distance/1000).toFixed(0)}km ${(rt.duration/60).toFixed(0)}min `;});
+  box.innerHTML=html+"<br>Azul rápida / Verde alternativa";
+  map.fitBounds(capaRutas.getBounds(),{padding:[30,30]});
+ }catch(e){box.innerHTML="No se encontró. Probá con internet y nombres simples.";}
 }
-
 function reportar(tipo){
- navigator.geolocation.getCurrentPosition(p=>{
-  var r={lat:p.coords.latitude,lng:p.coords.longitude,tipo:tipo};
-  reps.push(r); localStorage.setItem('reps',JSON.stringify(reps));
-  L.marker([r.lat,r.lng]).addTo(capaRep).bindPopup(tipo).openPopup();
-  document.getElementById('panelRep').style.display='none';
- },()=>{var c=map.getCenter(); var r={lat:c.lat,lng:c.lng,tipo:tipo}; reps.push(r); localStorage.setItem('reps',JSON.stringify(reps)); L.marker([c.lat,c.lng]).addTo(capaRep).bindPopup(tipo).openPopup();});
+ navigator.geolocation.getCurrentPosition(p=>{var r={lat:p.coords.latitude,lng:p.coords.longitude,tipo:tipo};reps.push(r);localStorage.setItem('reps',JSON.stringify(reps));L.marker([r.lat,r.lng]).addTo(capaRep).bindPopup(tipo).openPopup();document.getElementById('panelRep').style.display='none';},
+ ()=>{var c=map.getCenter();var r={lat:c.lat,lng:c.lng,tipo:tipo};reps.push(r);localStorage.setItem('reps',JSON.stringify(reps));L.marker([c.lat,c.lng]).addTo(capaRep).bindPopup(tipo).openPopup();});
 }
 </script>
 </body>
