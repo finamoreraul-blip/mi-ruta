@@ -7,32 +7,36 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <style>
 *{box-sizing:border-box}html,body{margin:0;height:100%;font-family:Roboto,Arial}
-#map{height:100vh;width:100%;background:#202020}
-.buscador{position:absolute;top:10px;left:10px;right:10px;z-index:1000;background:#fff;border-radius:14px;padding:10px;box-shadow:0 2px 10px rgba(0,0,0,.3);max-height:80vh;overflow:auto}
+#map{height:100vh;width:100%;background:#202020;touch-action:none}
+.buscador{position:absolute;top:10px;left:10px;right:10px;z-index:1000;background:#fff;border-radius:14px;padding:10px;box-shadow:0 2px 10px rgba(0,0,0,.3);max-height:82vh;overflow:auto;transition:transform.3s}
+.buscador.oculto{transform:translateY(-120%)}
+#btnAbrir{display:none;position:absolute;top:10px;left:10px;z-index:1001;background:#fff;border:none;border-radius:12px;padding:10px 14px;box-shadow:0 2px 8px rgba(0,0,0,.3);font-size:15px}
 .buscador input,.buscador select{width:100%;padding:10px;margin:4px 0;border:1px solid #ddd;border-radius:10px;font-size:15px}
 .fila2{display:flex;gap:6px}.fila2>div{flex:1}
 .fila{display:flex;gap:6px;margin-top:6px}.fila button{flex:1;padding:11px;border:none;border-radius:10px;font-size:15px}
 .btn-ir{background:#1a73e8;color:#fff}.btn-gps{background:#f1f3f4}
-.btn-calcular{width:100%;margin-top:6px;padding:12px;border:none;border-radius:10px;background:#0f9d58;color:#fff;font-size:16px;font-weight:bold}
-#llegadaBox{display:none;margin-top:8px;background:#e8f5e9;border-radius:10px;padding:12px;text-align:center;font-size:18px}
+.btn-calcular{width:100%;margin-top:6px;padding:13px;border:none;border-radius:10px;background:#0f9d58;color:#fff;font-size:16px;font-weight:bold}
+#llegadaBox{display:none;margin-top:8px;background:#e8f5e9;border-radius:10px;padding:12px;text-align:center;font-size:17px}
 .ruta-info{display:none;margin-top:8px;border-top:1px solid #eee;padding-top:8px}
 .ruta-card{padding:10px;border-radius:10px;margin:6px 0;background:#f8f9fa;border-left:6px solid #1a73e8}
 .alerta{background:#fff3cd;border:1px solid #ff9800;border-radius:10px;padding:8px;margin:6px 0;font-size:14px}
+.mini-resumen{position:absolute;bottom:20px;left:10px;right:70px;z-index:1000;background:#fff;border-radius:12px;padding:10px 12px;box-shadow:0 2px 8px rgba(0,0,0,.3);display:none;font-size:15px}
 .fab{position:absolute;z-index:1000;border:none;border-radius:50%;width:44px;height:44px;font-size:20px;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.3)}
 #btnSat{bottom:20px;right:12px;background:#333;color:#fff}#btnRep{bottom:70px;right:12px;background:#ff9800;color:#fff}
 .panel-rep{position:absolute;bottom:120px;right:12px;z-index:1001;background:#fff;border-radius:12px;padding:8px;display:none;box-shadow:0 2px 8px rgba(0,0,0,.3)}
-.panel-rep button{display:block;width:150px;margin:4px 0;padding:9px;border:none;border-radius:8px;background:#f5f5f5;font-size:14px}
+.panel-rep button{display:block;width:160px;margin:4px 0;padding:9px;border:none;border-radius:8px;background:#f5f5f5;font-size:14px}
 .zona-label{background:#ff9800;color:#fff;border:none;border-radius:6px;padding:2px 6px;font-size:12px}
 </style>
 </head>
 <body>
 <div id="map"></div>
-<div class="buscador">
+<button id="btnAbrir" onclick="mostrarPanel()">🔍 Buscar ruta</button>
+<div class="buscador" id="panelBusc">
+<div style="display:flex;justify-content:space-between;align-items:center"><b>MiRuta</b><button onclick="ocultarPanel()" style="border:none;background:#f1f3f4;border-radius:8px;padding:6px 10px">Ocultar</button></div>
 <input id="origenTxt" value="Tres Arroyos" placeholder="📍 Origen">
 <input id="destinoTxt" value="Coronel Pringles" placeholder="🏁 Destino">
 <div class="fila2">
-<div><label style="font-size:13px">¿A qué velocidad viajas?</label>
-<select id="vel"><option value="60">60 km/h Camión</option><option value="80">80 km/h Tranquilo</option><option value="100" selected>100 km/h Normal</option><option value="110">110 km/h Rápido</option><option value="120">120 km/h Máx</option></select></div>
+<div><label style="font-size:13px">¿A qué velocidad viajas?</label><select id="vel"><option value="60">60 km/h Camión</option><option value="80">80 km/h Tranquilo</option><option value="100" selected>100 km/h Normal</option><option value="110">110 km/h Rápido</option><option value="120">120 km/h Máx</option></select></div>
 <div><label style="font-size:13px">¿A qué hora salís?</label><input type="time" id="horaSal" value="08:00"></div>
 </div>
 <div class="fila"><button class="btn-gps" onclick="usarGPS()">📍 Mi ubicación</button><button class="btn-ir" onclick="buscarRuta()">Cómo llegar</button></div>
@@ -40,6 +44,7 @@
 <div id="llegadaBox"></div>
 <div id="rutaInfo" class="ruta-info"></div>
 </div>
+<div id="miniResumen" class="mini-resumen" onclick="mostrarPanel()"></div>
 <button id="btnSat" class="fab" onclick="cambiarVista()">🛰️</button>
 <button id="btnRep" class="fab" onclick="toggleRep()">⚠️</button>
 <div id="panelRep" class="panel-rep">
@@ -51,50 +56,59 @@
 </div>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-var osm=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19});
+var osm=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,keepBuffer:8});
 var sat=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,maxNativeZoom:18,detectRetina:true,keepBuffer:8});
 var map=L.map('map',{layers:[osm],zoomControl:false}).setView([-38.2,-60.7],9);
 L.control.zoom({position:'bottomleft'}).addTo(map);
 var esSat=false,capaRutas=L.layerGroup().addTo(map),capaRep=L.layerGroup().addTo(map),miPos=null;
-function cambiarVista(){esSat?(map.removeLayer(sat),map.addLayer(osm)):(map.removeLayer(osm),map.addLayer(sat));esSat=!esSat;}
-function toggleRep(){let p=document.getElementById('panelRep');p.style.display=p.style.display=='block'?'none':'block';}
-var zonas=[{lat:-38.25,lng:-60.9,t:"Niebla frecuente",d:"Niebla 5-9 AM. Máx 60 km/h.",tipo:"niebla"},{lat:-38.05,lng:-61.1,t:"Animales sueltos",d:"RP85 animales. Peligro 19-06h.",tipo:"animal"},{lat:-37.95,lng:-60.65,t:"Pozos graves",d:"12 reportes. Máx 80.",tipo:"pozo"}];
-zonas.forEach(z=>{var c=L.circle([z.lat,z.lng],{radius:4500,color:z.tipo=='animal'?'red':'orange',weight:2,fillOpacity:0.18}).addTo(map);c.bindPopup(`<b>⚠️ ${z.t}</b><br>${z.d}`);map.on('zoomend',()=>{map.getZoom()>=11?c.bindTooltip(z.t,{permanent:true,direction:'center',className:'zona-label'}).openTooltip():c.unbindTooltip();});});
-var reps=JSON.parse(localStorage.getItem('reps')||'[]');reps.forEach(r=>L.marker([r.lat,r.lng]).addTo(capaRep).bindPopup(r.tipo));
-function usarGPS(){navigator.geolocation.getCurrentPosition(p=>{miPos=[p.coords.latitude,p.coords.longitude];origenTxt.value="Mi ubicación";L.marker(miPos).addTo(map).bindPopup("Estás aquí").openPopup();map.setView(miPos,13);});}
-async function getCoords(t){if(t=="Mi ubicación"&&miPos)return miPos;let r=await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q='+encodeURIComponent(t+", Buenos Aires, Argentina"));let j=await r.json();return[parseFloat(j[0].lat),parseFloat(j[0].lon)];}
+function cambiarVista(){if(esSat){map.removeLayer(sat);map.addLayer(osm);}else{map.removeLayer(osm);map.addLayer(sat);}esSat=!esSat;}
+function toggleRep(){var p=document.getElementById('panelRep');p.style.display=p.style.display=='block'?'none':'block';}
+function ocultarPanel(){document.getElementById('panelBusc').classList.add('oculto');document.getElementById('btnAbrir').style.display='block';}
+function mostrarPanel(){document.getElementById('panelBusc').classList.remove('oculto');document.getElementById('btnAbrir').style.display='none';document.getElementById('miniResumen').style.display='none';}
+var zonas=[
+{lat:-38.25,lng:-60.9,t:"Niebla frecuente",d:"Bajo con niebla densa 5-9 AM. Reducí a 60 km/h y usá balizas.",tipo:"niebla"},
+{lat:-38.05,lng:-61.1,t:"Animales sueltos",d:"RP85 con animales sueltos. Peligro nocturno 19 a 06h. Máx 80.",tipo:"animal"},
+{lat:-37.95,lng:-60.65,t:"Pozos graves",d:"12 reportes de pozos. Precaución, máx 80 km/h.",tipo:"pozo"}
+];
+zonas.forEach(z=>{var c=L.circle([z.lat,z.lng],{radius:4500,color:z.tipo=='animal'?'red':'orange',weight:2,fillOpacity:0.18}).addTo(map);c.bindPopup("<b>⚠️ "+z.t+"</b><br>"+z.d);map.on('zoomend',function(){if(map.getZoom()>=11){c.bindTooltip(z.t,{permanent:true,direction:'center',className:'zona-label'}).openTooltip();}else{c.unbindTooltip();}});});
+var reps=JSON.parse(localStorage.getItem('reps')||'[]');reps.forEach(function(r){L.marker([r.lat,r.lng]).addTo(capaRep).bindPopup(r.tipo);});
+function usarGPS(){navigator.geolocation.getCurrentPosition(function(p){miPos=[p.coords.latitude,p.coords.longitude];document.getElementById('origenTxt').value="Mi ubicación";L.marker(miPos).addTo(map).bindPopup("Estás aquí").openPopup();map.setView(miPos,13);});}
+async function getCoords(t){if(t=="Mi ubicación"&&miPos)return miPos;var r=await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q='+encodeURIComponent(t+", Buenos Aires, Argentina"));var j=await r.json();return[parseFloat(j[0].lat),parseFloat(j[0].lon)];}
 async function buscarRuta(){
-let vel=parseInt(vel.value),hs=document.getElementById('horaSal').value;
-let box=document.getElementById('rutaInfo');box.style.display='block';box.innerHTML='Buscando...';
-let o=await getCoords(origenTxt.value),d=await getCoords(destinoTxt.value);
-let r=await fetch(`https://router.project-osrm.org/route/v1/driving/${o[1]},${o[0]};${d[1]},${d[0]}?overview=full&geometries=geojson&alternatives=2`);
-let j=await r.json();capaRutas.clearLayers();let html='';
-j.routes.slice(0,2).forEach((rt,i)=>{let km=rt.distance/1000,col=i==0?'#1a73e8':'#0f9d58';L.geoJSON(rt.geometry,{style:{color:col,weight:6}}).addTo(capaRutas);html+=`<div class="ruta-card" style="border-left-color:${col}"><b>${km.toFixed(1)} km</b> · ${(rt.duration/60).toFixed(0)} min <div style="font-size:13px;color:#666">${i==0?'Principal':'Alternativa'}</div></div>`;});
+var box=document.getElementById('rutaInfo');box.style.display='block';box.innerHTML='Buscando...';
+var o=await getCoords(document.getElementById('origenTxt').value),d=await getCoords(document.getElementById('destinoTxt').value);
+var r=await fetch("https://router.project-osrm.org/route/v1/driving/"+o[1]+","+o[0]+";"+d[1]+","+d[0]+"?overview=full&geometries=geojson&alternatives=2");
+var j=await r.json();capaRutas.clearLayers();var html='';
+j.routes.slice(0,2).forEach(function(rt,i){var km=rt.distance/1000,col=i==0?'#1a73e8':'#0f9d58';L.geoJSON(rt.geometry,{style:{color:col,weight:6}}).addTo(capaRutas);html+='<div class="ruta-card" style="border-left-color:'+col+'"><b>'+km.toFixed(1)+' km</b> · '+(rt.duration/60).toFixed(0)+' min<div style="font-size:13px;color:#666">'+(i==0?'Ruta principal':'Ruta alternativa')+'</div></div>';});
 box.innerHTML=html;map.fitBounds(capaRutas.getBounds(),{padding:[30,30]});
 }
 async function calcularLlegada(){
-let vel=parseInt(document.getElementById('vel').value);
-let horaSal=document.getElementById('horaSal').value;
-let [h,m]=horaSal.split(':').map(Number);
-let box=document.getElementById('llegadaBox');
-box.style.display='block';box.innerHTML='Calculando...';
+var vel=parseInt(document.getElementById('vel').value),horaSal=document.getElementById('horaSal').value;
+var hm=horaSal.split(':'),h=parseInt(hm[0]),m=parseInt(hm[1]);
+var box=document.getElementById('llegadaBox');box.style.display='block';box.innerHTML='Calculando...';
 try{
-let o=await getCoords(origenTxt.value),d=await getCoords(destinoTxt.value);
-let r=await fetch(`https://router.project-osrm.org/route/v1/driving/${o[1]},${o[0]};${d[1]},${d[0]}?overview=full&geometries=geojson`);
-let j=await r.json();
-let km=j.routes[0].distance/1000;
-let minTot=Math.round(km/vel*60);
-let lleg=h*60+m+minTot;
-let lh=Math.floor(lleg/60)%24,lm=lleg%60;
-let llegada=String(lh).padStart(2,'0')+':'+String(lm).padStart(2,'0');
-let alerta='';
-if(lh>=19||lh<6) alerta=`<div class="alerta">🌙 Llegás de noche (${llegada}). Ojo con animales sueltos.</div>`;
-if(h>=5&&h<=9) alerta+=`<div class="alerta">🌫️ Salís en horario de niebla.</div>`;
-box.innerHTML=`🚗 Salís <b>${horaSal}</b> a ${vel} km/h<br>📏 Son <b>${km.toFixed(1)} km</b><br>⏱️ Tardás <b>${minTot} min</b><div style="font-size:22px;margin:8px 0">🏁 <b>Vas a llegar a las ${llegada}</b></div>${alerta}`;
-buscarRuta();
+var o=await getCoords(document.getElementById('origenTxt').value),d=await getCoords(document.getElementById('destinoTxt').value);
+var r=await fetch("https://router.project-osrm.org/route/v1/driving/"+o[1]+","+o[0]+";"+d[1]+","+d[0]+"?overview=full&geometries=geojson&alternatives=2");
+var j=await r.json();capaRutas.clearLayers();
+var rt=j.routes[0],km=rt.distance/1000,minTot=Math.round(km/vel*60);
+var lleg=h*60+m+minTot,lh=Math.floor(lleg/60)%24,lm=lleg%60;
+var llegada=(lh<10?'0':'')+lh+':'+(lm<10?'0':'')+lm;
+L.geoJSON(rt.geometry,{style:{color:'#1a73e8',weight:6}}).addTo(capaRutas);
+var alertas='';
+if(lh>=19||lh<6) alertas+='<div class="alerta">🌙 Vas a llegar de noche ('+llegada+'). <b>Ojo animales sueltos</b> en RP85. Baja a 80.</div>';
+if(h>=5&&h<=9) alertas+='<div class="alerta">🌫️ Salís en horario de niebla (5-9 AM). Precaución en el bajo.</div>';
+if(vel>100) alertas+='<div class="alerta">⚠️ A '+vel+' km/h con pozos reportados es riesgoso.</div>';
+box.innerHTML='🚗 Salís <b>'+horaSal+'</b> a '+vel+' km/h<br>📏 Son <b>'+km.toFixed(1)+' km</b><br>⏱️ Tardás <b>'+minTot+' min</b><div style="font-size:22px;margin:8px 0">🏁 <b>Vas a llegar a las '+llegada+'</b></div>'+alertas;
+var box2=document.getElementById('rutaInfo');box2.style.display='block';
+box2.innerHTML='<div class="ruta-card"><b>'+km.toFixed(1)+' km</b> · '+minTot+' min<div style="font-size:13px">Salida '+horaSal+' → Llegada '+llegada+'</div></div>'+alertas;
+map.fitBounds(capaRutas.getBounds(),{padding:[40,40]});
+setTimeout(function(){ocultarPanel();var mini=document.getElementById('miniResumen');mini.style.display='block';mini.innerHTML='🏁 <b>Vas a llegar a las '+llegada+'</b><br><span style="font-size:13px">'+km.toFixed(1)+' km · '+minTot+' min · Tocá para ver detalle</span>';},800);
 }catch(e){box.innerHTML='No pude calcular. Revisá origen/destino.';}
 }
-function reportar(tipo){let save=(lat,lng)=>{let rs=JSON.parse(localStorage.getItem('reps')||'[]');rs.push({lat,lng,tipo});localStorage.setItem('reps',JSON.stringify(rs));L.marker([lat,lng]).addTo(capaRep).bindPopup(tipo).openPopup();toggleRep();};navigator.geolocation.getCurrentPosition(p=>save(p.coords.latitude,p.coords.longitude),()=>{let c=map.getCenter();save(c.lat,c.lng);});}
+function reportar(tipo){
+function save(lat,lng){var rs=JSON.parse(localStorage.getItem('reps')||'[]');rs.push({lat:lat,lng:lng,tipo:tipo});localStorage.setItem('reps',JSON.stringify(rs));L.marker([lat,lng]).addTo(capaRep).bindPopup("<b>"+tipo+"</b>").openPopup();toggleRep();}
+navigator.geolocation.getCurrentPosition(function(p){save(p.coords.latitude,p.coords.longitude);},function(){var c=map.getCenter();save(c.lat,c.lng);});
+}
 </script>
 </body>
 </html>
