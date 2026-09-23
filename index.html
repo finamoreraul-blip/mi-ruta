@@ -1,122 +1,123 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>MiRuta Final</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>MiRuta</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <style>
-*{box-sizing:border-box} body{margin:0;font-family:Arial;font-size:16px}
-#map{height:52vh;width:100%}
-.panel{padding:12px;max-width:600px;margin:auto}
-input,select{width:100%;padding:12px;margin:6px 0;border:1px solid #ccc;border-radius:10px}
-button{width:100%;padding:12px;margin:6px 0;border:none;border-radius:10px;background:#1a73e8;color:white;font-size:16px}
-.rep{width:48%;background:#ff9800;margin:4px 1%}
-.card{background:#fff;padding:10px;border-radius:10px;margin:8px 0;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+*{box-sizing:border-box} html,body{margin:0;height:100%;font-family:Arial}
+#map{height:100vh;width:100%;z-index:1}
+.buscador{position:absolute;top:10px;left:10px;right:10px;z-index:1000;background:white;border-radius:12px;padding:8px;box-shadow:0 2px 8px rgba(0,0,0,.3);display:flex;gap:6px}
+.buscador input{flex:1;padding:8px;font-size:14px;border:1px solid #ddd;border-radius:8px}
+.buscador button{padding:8px 10px;border:none;border-radius:8px;background:#1a73e8;color:white;font-size:14px}
+.fab{position:absolute;z-index:1000;border:none;border-radius:50%;width:44px;height:44px;font-size:20px;box-shadow:0 2px 6px rgba(0,0,0,.3);background:white}
+#btnGPS{bottom:90px;right:12px}
+#btnSat{bottom:140px;right:12px;background:#333;color:white;font-size:16px}
+#btnRep{bottom:20px;right:12px;background:#ff9800;color:white}
+.panel-rep{position:absolute;bottom:70px;right:12px;z-index:1001;background:white;border-radius:12px;padding:8px;display:none;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+.panel-rep button{display:block;width:100%;margin:4px 0;padding:8px;border:none;border-radius:8px;background:#f5f5f5;font-size:14px}
+.info{position:absolute;bottom:10px;left:10px;z-index:1000;background:white;padding:8px 10px;border-radius:10px;font-size:13px;max-width:70%;box-shadow:0 2px 6px rgba(0,0,0,.3)}
 </style>
 </head>
 <body>
-<div class="panel">
-<h3>MiRuta - Buenos Aires</h3>
-<button onclick="usarGPS()">📍 Usar mi ubicación real</button>
-<input id="origenTxt" placeholder="Origen: ej Tres Arroyos">
-<input id="destinoTxt" placeholder="Destino: ej Coronel Pringles">
-<button onclick="buscarRuta()">🔍 Buscar rutas</button>
-<div id="info"></div>
-<h4>Reportar peligro</h4>
-<button class="rep" onclick="reportar('Pozo')">🕳️ Pozo</button>
-<button class="rep" onclick="reportar('Niebla')">🌫️ Niebla</button>
-<button class="rep" onclick="reportar('Animal suelto')">🐄 Animal</button>
-<button class="rep" onclick="reportar('Corte')">🚧 Corte</button>
-</div>
 <div id="map"></div>
-<div class="panel" id="detalles"></div>
+
+<div class="buscador">
+<input id="origenTxt" value="Tres Arroyos" placeholder="Origen">
+<input id="destinoTxt" value="Coronel Pringles" placeholder="Destino">
+<button onclick="buscarRuta()">Ir</button>
+</div>
+
+<button id="btnGPS" class="fab" onclick="usarGPS()">📍</button>
+<button id="btnSat" class="fab" onclick="cambiarVista()">🛰️</button>
+<button id="btnRep" class="fab" onclick="toggleRep()">⚠️</button>
+
+<div id="panelRep" class="panel-rep">
+<button onclick="reportar('🕳️ Pozo')">🕳️ Pozo</button>
+<button onclick="reportar('🌫️ Niebla')">🌫️ Niebla</button>
+<button onclick="reportar('🐄 Animal')">🐄 Animal</button>
+<button onclick="reportar('🚧 Corte')">🚧 Corte</button>
+</div>
+
+<div id="infoBox" class="info">Escribí origen/destino y dale Ir</div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-var map = L.map('map').setView([-38.0,-60.5],7);
-L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19, attribution:'©OSM'}).addTo(map);
-var capaRutas = L.layerGroup().addTo(map);
-var capaRep = L.layerGroup().addTo(map);
-var miPos = null;
+var osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19});
+var sat = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:19});
+var map = L.map('map',{layers:[osm], zoomControl:false}).setView([-38.2,-60.7],9);
+L.control.zoom({position:'bottomleft'}).addTo(map);
+var esSat=false;
+var capaRutas=L.layerGroup().addTo(map);
+var capaRep=L.layerGroup().addTo(map);
+var miPos=null;
 
-// ZONAS PELIGROSAS FIJAS (ejemplo real)
-var zonas = [
- {lat:-38.2,lng:-60.8,t:"Zona de niebla frecuente"},
- {lat:-38.0,lng:-61.0,t:"Zona de animales sueltos RP85"},
- {lat:-37.9,lng:-60.6,t:"Curvas peligrosas"}
-];
-zonas.forEach(z=>{
- L.circle([z.lat,z.lng],{radius:5000,color:'orange'}).addTo(map).bindPopup("⚠️ "+z.t);
-});
-
-// cargar reportes guardados
-var reps = JSON.parse(localStorage.getItem('reps')||'[]');
-reps.forEach(pintarReporte);
-function pintarReporte(r){
- L.marker([r.lat,r.lng]).addTo(capaRep).bindPopup(r.tipo+"<br>"+r.hora);
+function cambiarVista(){
+ if(esSat){map.removeLayer(sat);map.addLayer(osm);}else{map.removeLayer(osm);map.addLayer(sat);}
+ esSat=!esSat;
 }
+function toggleRep(){
+ var p=document.getElementById('panelRep');
+ p.style.display=p.style.display=='block'?'none':'block';
+}
+// zonas fijas
+[[-38.25,-60.9,"Niebla frecuente"],[-38.05,-61.1,"Animales sueltos"]].forEach(z=>{
+ L.circle([z[0],z[1]],{radius:4000,color:'orange',fillOpacity:0.2}).addTo(map).bindPopup("⚠️ "+z[2]);
+});
+// reportes guardados
+var reps=JSON.parse(localStorage.getItem('reps')||'[]');
+reps.forEach(r=>L.marker([r.lat,r.lng]).addTo(capaRep).bindPopup(r.tipo));
 
 function usarGPS(){
  navigator.geolocation.getCurrentPosition(p=>{
   miPos=[p.coords.latitude,p.coords.longitude];
-  document.getElementById('origenTxt').value = "Mi ubicación ("+miPos[0].toFixed(3)+","+miPos[1].toFixed(3)+")";
+  map.setView(miPos,13);
   L.marker(miPos).addTo(map).bindPopup("Estás aquí").openPopup();
-  map.setView(miPos,12);
-  localStorage.setItem('miPos',JSON.stringify(miPos));
- },()=>alert("Activa el GPS"));
+ });
 }
 
-async function getCoords(texto){
- if(texto.includes("Mi ubicación") && miPos) return miPos;
- let url='https://nominatim.openstreetmap.org/search?format=json&limit=1&q='+encodeURIComponent(texto+", Buenos Aires, Argentina");
- let r=await fetch(url,{headers:{'Accept':'application/json'}});
- let j=await r.json();
- if(!j[0]) throw "No encontrado";
+async function getCoords(t){
+ var q=encodeURIComponent(t+", Buenos Aires, Argentina");
+ var r=await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q='+q);
+ var j=await r.json();
+ if(!j.length) throw "no";
  return [parseFloat(j[0].lat), parseFloat(j[0].lon)];
 }
 
 async function buscarRuta(){
- let info=document.getElementById('info');
- info.innerHTML="Buscando...";
+ var box=document.getElementById('infoBox');
+ box.innerHTML="Buscando...";
  try{
-  let o = await getCoords(document.getElementById('origenTxt').value);
-  let d = await getCoords(document.getElementById('destinoTxt').value);
-  let url=`https://router.project-osrm.org/route/v1/driving/${o[1]},${o[0]};${d[1]},${d[0]}?overview=full&geometries=geojson&alternatives=true`;
-  let r=await fetch(url); let j=await r.json();
-  if(!j.routes || j.routes.length==0) throw "sin ruta";
+  var oTxt=document.getElementById('origenTxt').value;
+  var dTxt=document.getElementById('destinoTxt').value;
+  var o = (miPos && oTxt.includes("Mi "))? miPos : await getCoords(oTxt);
+  var d = await getCoords(dTxt);
+  var url=`https://router.project-osrm.org/route/v1/driving/${o[1]},${o[0]};${d[1]},${d[0]}?overview=full&geometries=geojson&alternatives=2`;
+  var r=await fetch(url); var j=await r.json();
+  if(!j.routes ||!j.routes.length) throw "noroute";
   capaRutas.clearLayers();
-  let html="";
+  var html="";
   j.routes.slice(0,2).forEach((rt,i)=>{
-   let col=i==0?'blue':'green';
-   L.geoJSON(rt.geometry,{style:{color:col,weight:6}}).addTo(capaRutas);
-   let km=(rt.distance/1000).toFixed(1);
-   html+=`<div class="card"><b style="color:${col}">Ruta ${i+1} ${i==0?'(Azul)':'(Verde)'}</b><br>${km} km - ${(rt.duration/60).toFixed(0)} min<br>
-   ${i==0?'⚠️ Revisar reportes. Vel rec 80 km/h':'✅ Mejor estado. Vel rec 100 km/h'}<br>
-   Estado: ${i==0?'Regular con pozos reportados':'Bueno'}</div>`;
+   var col=i==0?'#1a73e8':'#0f9d58';
+   L.geoJSON(rt.geometry,{style:{color:col,weight:5}}).addTo(capaRutas);
+   html+=`<b style="color:${col}">R${i+1}</b> ${(rt.distance/1000).toFixed(0)}km ${(rt.duration/60).toFixed(0)}min | `;
   });
-  document.getElementById('detalles').innerHTML=html;
-  map.fitBounds(capaRutas.getBounds());
-  info.innerHTML="Listo";
-  localStorage.setItem('ultima',JSON.stringify({o:document.getElementById('origenTxt').value,d:document.getElementById('destinoTxt').value}));
- }catch(e){ info.innerHTML="Error: no se encontró la ruta. Probá con 'Tres Arroyos' y 'Coronel Pringles'"; }
+  box.innerHTML=html+"<br>Azul: rápida (80km/h) Verde: alt (100km/h)";
+  map.fitBounds(capaRutas.getBounds(),{padding:[40,40]});
+ }catch(e){
+  box.innerHTML="No se encontró ruta. Probá solo 'Tres Arroyos' y 'Coronel Pringles' con internet.";
+ }
 }
 
 function reportar(tipo){
- function guardar(lat,lng){
-  let r={lat:lat,lng:lng,tipo:tipo,hora:new Date().toLocaleString()};
+ navigator.geolocation.getCurrentPosition(p=>{
+  var r={lat:p.coords.latitude,lng:p.coords.longitude,tipo:tipo};
   reps.push(r); localStorage.setItem('reps',JSON.stringify(reps));
-  pintarReporte(r);
- }
- if(miPos){ guardar(miPos[0],miPos[1]); }
- else{
-  navigator.geolocation.getCurrentPosition(p=>guardar(p.coords.latitude,p.coords.longitude),
-  ()=>{ let c=map.getCenter(); guardar(c.lat,c.lng); alert("Se guardó en el centro del mapa"); });
- }
+  L.marker([r.lat,r.lng]).addTo(capaRep).bindPopup(tipo).openPopup();
+  document.getElementById('panelRep').style.display='none';
+ },()=>{var c=map.getCenter(); var r={lat:c.lat,lng:c.lng,tipo:tipo}; reps.push(r); localStorage.setItem('reps',JSON.stringify(reps)); L.marker([c.lat,c.lng]).addTo(capaRep).bindPopup(tipo).openPopup();});
 }
-// recuperar última
-let u=JSON.parse(localStorage.getItem('ultima')||'null');
-if(u){ document.getElementById('origenTxt').value=u.o; document.getElementById('destinoTxt').value=u.d; }
-miPos=JSON.parse(localStorage.getItem('miPos')||'null');
 </script>
 </body>
 </html>
