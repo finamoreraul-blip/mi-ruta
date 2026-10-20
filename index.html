@@ -3,252 +3,253 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MarketPro - Tu marketplace de confianza</title>
+<title>MARKET3A - Marketplace de Tres Arroyos</title>
 <style>
 *{font-family:Arial,sans-serif;box-sizing:border-box}
 body{margin:0;background:#f4f6fb;color:#111}
-header{background:white;padding:12px 25px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10;box-shadow:0 2px 10px rgba(0,0,0,0.1)}
-.logo{font-size:30px;font-weight:bold;color:#0b5fff}
-.logo span{color:#00b4d8}
-nav a{margin:0 8px;text-decoration:none;color:#222;font-weight:600;font-size:14px}
-nav a:hover{color:#0b5fff}
-.search{display:flex;gap:8px}
-.search input{padding:10px 15px;border-radius:25px;border:1px solid #ccc;width:280px}
-.search button{background:#0b5fff;color:white;border:none;padding:10px 20px;border-radius:25px;font-weight:bold;cursor:pointer}
-.banner{background:linear-gradient(90deg,#0b5fff,#00b4d8);color:white;padding:50px 30px;margin:20px;border-radius:20px;display:flex;justify-content:space-between;align-items:center}
-.banner h1{font-size:38px;margin:0 0 10px 0}
-.banner p{font-size:17px;max-width:550px}
-.btn-orange{background:#ff7a1a;color:white;border:none;padding:12px 25px;border-radius:25px;font-weight:bold;cursor:pointer;margin-right:10px}
-.btn-white{background:transparent;color:white;border:2px solid white;padding:12px 25px;border-radius:25px;font-weight:bold;cursor:pointer}
-h2.titulo{font-size:28px;margin:30px 20px 5px 20px;color:#0b2a5b}
-p.sub{margin:0 20px 15px 20px;color:#555}
-.cats{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;padding:0 20px}
-.cat{background:white;padding:18px;border-radius:14px;box-shadow:0 2px 8px rgba(0,0,0,0.07);display:flex;align-items:center;gap:12px}
-.cat .icon{font-size:28px;background:#eef4ff;padding:12px;border-radius:12px}
-.cat small{color:#666}
+header{background:white;padding:12px 30px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10;box-shadow:0 2px 10px rgba(0,0,0,0.1);flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-icon{font-size:36px;color:#0b5fff}
+.logo-text{font-size:30px;font-weight:900;color:#0b2a5b;line-height:1}
+.logo-text small{display:block;font-size:13px;font-weight:400;color:#555}
+nav{display:flex;gap:10px;flex-wrap:wrap}
+nav a{margin:0 8px;text-decoration:none;color:#0b2a5b;font-weight:700;font-size:14px}
+.header-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.btn-login{border:2px solid #0b5fff;color:#0b5fff;background:white;padding:8px 18px;border-radius:25px;font-weight:bold;cursor:pointer}
+.menu-btn{display:none;background:#0b5fff;color:white;border:none;padding:8px 14px;border-radius:8px;font-size:20px;cursor:pointer}
+.banner{background:linear-gradient(90deg,#0b3d91,#0b5fff);color:white;padding:45px 30px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.banner h1{font-size:42px;margin:0 0 12px 0}
+.banner p{font-size:16px;max-width:600px}
+.btn-explorar{background:white;color:#0b5fff;border:none;padding:13px 25px;border-radius:25px;font-weight:bold;cursor:pointer;margin:5px}
+.btn-vender{background:transparent;color:white;border:2px solid white;padding:13px 25px;border-radius:25px;font-weight:bold;cursor:pointer;margin:5px}
+h2.titulo{font-size:30px;margin:35px 20px 5px 20px;color:#0b2a5b}
+p.sub{margin:0 20px 18px 20px;color:#555;font-size:16px}
+.cats{display:grid;grid-template-columns:repeat(8,1fr);gap:12px;padding:0 20px}
+.cat{background:white;padding:16px 8px;border-radius:14px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.07)}
+.cat-icon{width:55px;height:55px;background:#0b5fff;color:white;border-radius:12px;display:flex;justify-content:center;align-items:center;font-size:26px;margin:0 auto 10px auto}
 .productos{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;padding:20px}
-.card{background:white;border-radius:16px;padding:15px;box-shadow:0 4px 12px rgba(0,0,0,0.08)}
-.card img{width:100%;height:190px;object-fit:cover;border-radius:12px}
+.card{background:white;border-radius:16px;padding:14px;box-shadow:0 4px 14px rgba(0,0,0,0.08)}
+.card img.main{width:100%;height:200px;object-fit:cover;border-radius:12px}
 .thumbs{display:flex;gap:6px;margin:8px 0}
-.thumbs img{width:45px;height:45px;border-radius:8px;cursor:pointer;border:2px solid transparent}
-.thumbs img:hover{border-color:#0b5fff}
-.precio{color:#0b5fff;font-size:22px;font-weight:bold;margin:5px 0}
-.card p{font-size:14px;color:#333;margin:6px 0}
-.unidades{background:#eef2ff;border-radius:20px;padding:5px 12px;font-size:13px;display:inline-block;margin-top:8px}
-.btn-buy{background:#0b5fff;color:white;border:none;width:100%;padding:12px;border-radius:25px;font-weight:bold;margin-top:10px;cursor:pointer}
-.beneficios{display:flex;justify-content:space-around;background:white;margin:20px;padding:25px;border-radius:16px;text-align:center}
-.beneficios div{flex:1}
-.testimonios{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;padding:0 20px}
-.test{background:white;padding:18px;border-radius:14px}
-footer{background:#0b2a5b;color:white;padding:30px 20px;margin-top:30px;text-align:center}
-footer a{color:#9ecbff;margin:0 10px;text-decoration:none}
-
-/* PANEL ADMIN */
-.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);justify-content:center;align-items:center;z-index:20}
-.modal-content{background:white;color:#111;padding:25px;border-radius:16px;width:600px;max-height:90vh;overflow:auto}
+.thumbs img{width:50px;height:50px;border-radius:8px;cursor:pointer;object-fit:cover;border:2px solid transparent}
+.tag{background:#e8eefc;color:#0b5fff;font-size:11px;font-weight:bold;padding:3px 8px;border-radius:6px;text-transform:uppercase}
+.card h3{margin:8px 0 4px 0;font-size:16px}
+.precio{color:#0b5fff;font-size:22px;font-weight:900;margin:6px 0}
+.unidades{font-size:13px;color:#333;margin-top:6px}
+.btn-carrito{background:#dbe9ff;color:#0b5fff;border:none;width:100%;padding:11px;border-radius:20px;font-weight:bold;margin-top:10px;cursor:pointer}
+.beneficios{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;padding:20px;background:white;margin:20px;border-radius:16px;text-align:center}
+footer{background:#0b2a5b;color:white;padding:35px 25px;margin-top:30px;display:grid;grid-template-columns:2fr 1fr 1fr;gap:20px}
+footer a{color:#9ecbff;text-decoration:none;display:block;margin:5px 0}
+#gear{position:fixed;bottom:20px;right:20px;background:#0b2a5b;color:white;width:58px;height:58px;border-radius:50%;display:flex;justify-content:center;align-items:center;font-size:28px;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,0.3);z-index:15}
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.65);justify-content:center;align-items:center;z-index:20;padding:15px}
+.modal-content{background:white;color:#111;padding:25px;border-radius:16px;width:650px;max-width:95%;max-height:90vh;overflow:auto}
 .modal-content input,.modal-content select,.modal-content textarea{width:100%;padding:10px;margin:6px 0;border-radius:8px;border:1px solid #ccc}
 .modal-content button{background:#0b5fff;color:white;border:none;padding:10px 18px;border-radius:20px;cursor:pointer;margin-top:8px}
-#gear{position:fixed;bottom:20px;right:20px;background:white;width:55px;height:55px;border-radius:50%;display:flex;justify-content:center;align-items:center;font-size:28px;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,0.2);z-index:15}
 table{width:100%;border-collapse:collapse;margin-top:10px}
 table,th,td{border:1px solid #ddd;padding:8px;font-size:13px}
+
+@media(max-width:1000px){
+.cats{grid-template-columns:repeat(4,1fr)}
+.productos{grid-template-columns:repeat(2,1fr)}
+.beneficios{grid-template-columns:repeat(2,1fr)}
+footer{grid-template-columns:1fr}
+@media(max-width:600px){
+nav{display:none;width:100%;flex-direction:column;background:#f4f6fb;padding:10px;border-radius:10px;margin-top:10px}
+nav.active{display:flex}
+.menu-btn{display:block}
+.cats{grid-template-columns:1fr 1fr}
+.productos{grid-template-columns:1fr}
+.banner h1{font-size:26px}
+.beneficios{grid-template-columns:1fr}
+header{flex-direction:column;align-items:flex-start}
+.logo-text{font-size:24px}
 </style>
 </head>
 <body>
 
 <header>
-  <div class="logo">Market<span>Pro</span></div>
+  <div style="display:flex;justify-content:space-between;width:100%;align-items:center">
+    <div class="logo">
+      <div class="logo-icon">🛒</div>
+      <div class="logo-text">MARKET3A<small>Marketplace de Tres Arroyos</small></div>
+    </div>
+    <button class="menu-btn" onclick="document.querySelector('nav').classList.toggle('active')">☰</button>
+  </div>
   <nav>
-    <a href="#tec">Tecnología</a>
-    <a href="#ali">Alimentos</a>
-    <a href="#beb">Bebidas</a>
-    <a href="#hog">Hogar</a>
-    <a href="#dep">Deportes</a>
-    <a href="#bel">Belleza</a>
-    <a href="#mas">Mascotas</a>
-    <a href="#ofe">Ofertas</a>
+    <a href="#">Inicio</a>
+    <a href="#categorias">Categorías</a>
+    <a href="#ofertas">Ofertas</a>
+    <a href="#">Vender</a>
+    <a href="#">Ayuda</a>
   </nav>
-  <div class="search">
-    <input placeholder="Buscar productos, marcas y más...">
-    <button>Buscar</button>
+  <div class="header-actions">
+    <span>🔍</span><span>👤</span><span>🛒 3</span>
+    <button class="btn-login">Iniciar sesión</button>
   </div>
 </header>
 
 <div class="banner">
   <div>
-    <h1>Tu marketplace de confianza</h1>
-    <p>Compra productos de vendedores verificados. Miles de artículos en Tecnología, Alimentos, Bebidas, Hogar y más, con envío a todo el país.</p>
-    <button class="btn-orange">Ver ofertas de la semana</button>
-    <button class="btn-white">Cómo vender</button>
+    <h1>Todo lo que necesitas en<br>Tres Arroyos</h1>
+    <p>Tecnología • Alimentos • Bebidas • Hogar • Deportes • Belleza • Mascotas, todo en un solo lugar, compra rápido y seguro desde tu ciudad</p>
+    <button class="btn-explorar">Explorar productos</button>
+    <button class="btn-vender">Cómo vender</button>
   </div>
-  <div style="font-size:80px">🛒</div>
 </div>
 
-<h2 class="titulo">Categorías</h2>
-<p class="sub">Explora las 8 categorías disponibles</p>
+<h2 class="titulo" id="categorias">Categorías</h2>
+<p class="sub">Explora por categoría y encuentra lo que buscas</p>
 <div class="cats">
-  <div class="cat"><div class="icon">💻</div><div><b>Tecnología</b><br><small>450+ productos</small></div></div>
-  <div class="cat"><div class="icon">🥑</div><div><b>Alimentos</b><br><small>320+ productos</small></div></div>
-  <div class="cat"><div class="icon">🥤</div><div><b>Bebidas</b><br><small>180+ productos</small></div></div>
-  <div class="cat"><div class="icon">🏠</div><div><b>Hogar</b><br><small>290+ productos</small></div></div>
-  <div class="cat"><div class="icon">⚽</div><div><b>Deportes</b><br><small>210+ productos</small></div></div>
-  <div class="cat"><div class="icon">💄</div><div><b>Belleza y cuidado</b><br><small>380+ productos</small></div></div>
-  <div class="cat"><div class="icon">🐾</div><div><b>Mascotas</b><br><small>150+ productos</small></div></div>
-  <div class="cat" style="background:#ff7a1a;color:white"><div class="icon" style="background:white">🏷️</div><div><b>Ofertas de la semana</b><br><small>120+ ofertas HOT</small></div></div>
+  <div class="cat"><div class="cat-icon">💻</div><b>Tecnología</b></div>
+  <div class="cat"><div class="cat-icon">🍎</div><b>Alimentos</b></div>
+  <div class="cat"><div class="cat-icon">🥤</div><b>Bebidas</b></div>
+  <div class="cat"><div class="cat-icon">🏠</div><b>Hogar</b></div>
+  <div class="cat"><div class="cat-icon">💪</div><b>Deportes</b></div>
+  <div class="cat"><div class="cat-icon">⚽</div><b>Fútbol</b></div>
+  <div class="cat"><div class="cat-icon">💄</div><b>Belleza</b></div>
+  <div class="cat"><div class="cat-icon">🐾</div><b>Mascotas</b></div>
 </div>
 
 <h2 class="titulo">Productos destacados</h2>
-<p class="sub">Los más vendidos esta semana, seleccionados para ti</p>
-<div class="productos" id="grid">
+<p class="sub">Los más elegidos por la comunidad de Tres Arroyos</p>
+<div class="productos">
 
-  <div class="card" id="tec">
-    <img src="https://via.placeholder.com/400x300?text=Auriculares" id="img1">
+  <div class="card">
+    <img class="main" src="https://via.placeholder.com/400x300?text=Auriculares+BT" id="m1">
     <div class="thumbs">
-      <img src="https://via.placeholder.com/400x300?text=Auriculares" onclick="document.getElementById('img1').src=this.src">
-      <img src="https://via.placeholder.com/400x300?text=Foto+2" onclick="document.getElementById('img1').src=this.src">
-      <img src="https://via.placeholder.com/400x300?text=Foto+3" onclick="document.getElementById('img1').src=this.src">
+      <img src="https://via.placeholder.com/400x300?text=Auriculares+BT" onclick="document.getElementById('m1').src=this.src">
+      <img src="https://via.placeholder.com/400x300?text=Foto+2" onclick="document.getElementById('m1').src=this.src">
+      <img src="https://via.placeholder.com/400x300?text=Foto+3" onclick="document.getElementById('m1').src=this.src">
     </div>
-    <small>Tecnología</small>
-    <h3>Auriculares Bluetooth Pro</h3>
-    <div class="precio">$49.990</div>
-    <p>Cancelación de ruido, 30hs batería, Bluetooth 5.3. Cómodo y plegable.</p>
-    <span class="unidades">Unidades: 15 disponibles</span>
-    <button class="btn-buy">Comprar</button>
+    <span class="tag">Tecnología</span>
+    <h3>Auriculares Bluetooth Inalámbricos</h3>
+    <p>Sonido HD, 24h batería, micrófono integrado</p>
+    <div class="precio">$29.990</div>
+    <div class="unidades">📦 12 unidades disponibles</div>
+    <button class="btn-carrito">Agregar al carrito</button>
   </div>
 
-  <div class="card" id="ali">
-    <img src="https://via.placeholder.com/400x300?text=Cafe+Gourmet" id="img2">
+  <div class="card">
+    <img class="main" src="https://via.placeholder.com/400x300?text=Aceite+Oliva" id="m2">
     <div class="thumbs">
-      <img src="https://via.placeholder.com/400x300?text=Cafe+Gourmet" onclick="document.getElementById('img2').src=this.src">
-      <img src="https://via.placeholder.com/400x300?text=Foto+2" onclick="document.getElementById('img2').src=this.src">
+      <img src="https://via.placeholder.com/400x300?text=Aceite+Oliva" onclick="document.getElementById('m2').src=this.src">
+      <img src="https://via.placeholder.com/400x300?text=Foto+2" onclick="document.getElementById('m2').src=this.src">
     </div>
-    <small>Alimentos</small>
-    <h3>Café Gourmet 500g</h3>
-    <div class="precio">$12.500</div>
-    <p>Tostado premium, grano 100% arábica. Ideal para espresso y filtrado.</p>
-    <span class="unidades">Unidades: 30 disponibles</span>
-    <button class="btn-buy">Comprar</button>
+    <span class="tag">Alimentos</span>
+    <h3>Aceite de Oliva Extra Virgen 500ml</h3>
+    <p>Prensado en frío, origen local Tres Arroyos</p>
+    <div class="precio">$4.250</div>
+    <div class="unidades">📦 30 unidades disponibles</div>
+    <button class="btn-carrito">Agregar al carrito</button>
   </div>
 
-  <div class="card" id="beb">
-    <img src="https://via.placeholder.com/400x300?text=Botella+Termica" id="img3">
+  <div class="card" id="ofertas">
+    <img class="main" src="https://via.placeholder.com/400x300?text=Agua+Mineral" id="m3">
     <div class="thumbs">
-      <img src="https://via.placeholder.com/400x300?text=Botella+Termica" onclick="document.getElementById('img3').src=this.src">
-      <img src="https://via.placeholder.com/400x300?text=Foto+2" onclick="document.getElementById('img3').src=this.src">
+      <img src="https://via.placeholder.com/400x300?text=Agua+Mineral" onclick="document.getElementById('m3').src=this.src">
+      <img src="https://via.placeholder.com/400x300?text=Foto+2" onclick="document.getElementById('m3').src=this.src">
     </div>
-    <small>Bebidas</small>
-    <h3>Botella Térmica 1L Acero</h3>
-    <div class="precio">$18.990</div>
-    <p>Mantiene frío 24hs, calor 12hs. Pico cebador incluido, acero inoxidable.</p>
-    <span class="unidades">Unidades: 20 disponibles</span>
-    <button class="btn-buy">Comprar</button>
+    <span class="tag">Bebidas</span>
+    <h3>Agua Mineral Pack x6 500ml</h3>
+    <p>Agua natural sin gas, pack 6 unidades</p>
+    <div class="precio">$2.100</div>
+    <div class="unidades">📦 50 unidades disponibles</div>
+    <button class="btn-carrito">Agregar al carrito</button>
   </div>
 
-  <div class="card" id="hog">
-    <img src="https://via.placeholder.com/400x300?text=Set+Organizador" id="img4">
+  <div class="card">
+    <img class="main" src="https://via.placeholder.com/400x300?text=Sartenes" id="m4">
     <div class="thumbs">
-      <img src="https://via.placeholder.com/400x300?text=Set+Organizador" onclick="document.getElementById('img4').src=this.src">
-      <img src="https://via.placeholder.com/400x300?text=Foto+2" onclick="document.getElementById('img4').src=this.src">
+      <img src="https://via.placeholder.com/400x300?text=Sartenes" onclick="document.getElementById('m4').src=this.src">
+      <img src="https://via.placeholder.com/400x300?text=Foto+2" onclick="document.getElementById('m4').src=this.src">
     </div>
-    <small>Hogar</small>
-    <h3>Set Organizador Cocina x5</h3>
-    <div class="precio">$22.990</div>
-    <p>Organizadores apilables, material resistente, ideal para cocina y despensa.</p>
-    <span class="unidades">Unidades: 10 disponibles</span>
-    <button class="btn-buy">Comprar</button>
+    <span class="tag">Hogar</span>
+    <h3>Set de Sartenes Antiadherentes x3</h3>
+    <p>Inducción, mango ergonómico, 20/24/28cm</p>
+    <div class="precio">$22.500</div>
+    <div class="unidades">📦 8 unidades disponibles</div>
+    <button class="btn-carrito">Agregar al carrito</button>
   </div>
 
 </div>
 
 <div class="beneficios">
-  <div>🚚<br><b>Envío a todo el país</b><br><small>24 a 72hs</small></div>
-  <div>🛡️<br><b>Compra protegida</b><br><small>Garantía total</small></div>
-  <div>💳<br><b>Pagá como quieras</b><br><small>Tarjeta, transferencia, efectivo</small></div>
-  <div>📞<br><b>Soporte 24/7</b><br><small>Siempre te ayudamos</small></div>
-</div>
-
-<h2 class="titulo">Ofertas de la semana</h2>
-<p class="sub">Precios rebajados solo hasta el domingo</p>
-<div class="productos">
-  <div class="card"><img src="https://via.placeholder.com/400x300?text=Oferta+1"><small>Ofertas</small><h3>Parlante Bluetooth Grande</h3><div class="precio" style="color:#ff7a1a">$29.990 <s style="color:#999;font-size:14px">$45.000</s></div><p>Sonido potente, resistente al agua, 12hs de batería.</p><span class="unidades">Unidades: 5 disponibles</span><button class="btn-buy" style="background:#ff7a1a">Aprovechar</button></div>
-  <div class="card"><img src="https://via.placeholder.com/400x300?text=Oferta+2"><small>Ofertas</small><h3>Kit Skincare Facial</h3><div class="precio" style="color:#ff7a1a">$15.990 <s style="color:#999;font-size:14px">$25.000</s></div><p>Rutina completa: limpieza, hidratante y protector.</p><span class="unidades">Unidades: 12 disponibles</span><button class="btn-buy" style="background:#ff7a1a">Aprovechar</button></div>
-</div>
-
-<h2 class="titulo">Qué dicen nuestros clientes</h2>
-<div class="testimonios">
-  <div class="test"><b>★★★</b><p>"Llegó rapidísimo y tal cual la foto. La página es muy clara."</p><small>Mariana, Buenos Aires</small></div>
-  <div class="test"><b>★★★</b><p>"Compré la botella térmica y es de muy buena calidad. Vuelvo a comprar."</p><small>Diego, Córdoba</small></div>
-  <div class="test"><b>★★★</b><p>"Muy buena atención y el producto igual al de la descripción."</p><small>Lucía, Rosario</small></div>
+  <div><div style="font-size:30px">🚚</div><b>Envío local</b><p>Tres Arroyos y zona, en el día</p></div>
+  <div><div style="font-size:30px">🛡️</div><b>Compra protegida</b><p>Si no llega, te devolvemos</p></div>
+  <div><div style="font-size:30px">💳</div><b>Pagos locales</b><p>Tarjeta, transferencia, efectivo</p></div>
+  <div><div style="font-size:30px">📞</div><b>Soporte local</b><p>Te atendemos por WhatsApp</p></div>
 </div>
 
 <footer>
-  <p><b>MarketPro</b> © 2026 - Marketplace - Vende con nosotros - Políticas - Contacto - Soporte 24/7</p>
-  <p><a href="#">Términos</a> <a href="#">Privacidad</a> <a href="#">Ayuda</a></p>
+  <div>
+    <h2 style="font-size:32px;margin:0">MARKET3A</h2>
+    <p>El marketplace de Tres Arroyos. Compra y vende local, fácil y seguro.</p>
+    <p>© 2026 MARKET3A - Todos los derechos reservados</p>
+  </div>
+  <div>
+    <h3>Soporte</h3>
+    <a href="#">Ayuda</a><a href="#">Envíos</a><a href="#">Contacto</a><a href="#">Términos y condiciones</a>
+  </div>
+  <div>
+    <h3>Contacto</h3>
+    <p>📍 Tres Arroyos, Buenos Aires</p>
+    <p>📞 +54 2983 123456</p>
+    <p>✉️ hola@market3a.com.ar</p>
+  </div>
 </footer>
 
-<div id="gear" onclick="abrirAdmin()">⚙️</div>
-
-<div class="modal" id="adminModal">
+<div id="gear" onclick="abrir()">⚙️</div>
+<div class="modal" id="modal">
   <div class="modal-content">
-    <h2>Panel Admin - Acceso Total</h2>
-    <div id="loginAdmin">
+    <h2>Panel Admin MARKET3A</h2>
+    <div id="loginDiv">
       <input id="pass" type="password" placeholder="Contraseña">
-      <button onclick="entrar()">Entrar al Panel</button>
+      <button onclick="entrar()">Entrar</button>
       <p id="err" style="color:red"></p>
     </div>
-    <div id="panelAdmin" style="display:none">
-      <h3>Agregar / Editar Producto</h3>
-      <input id="p-nombre" placeholder="Nombre del producto">
-      <input id="p-precio" type="number" placeholder="Precio (ej 2700)">
-      <textarea id="p-desc" placeholder="Descripción completa"></textarea>
-      <input id="p-unidades" type="number" placeholder="Unidades disponibles">
-      <select id="p-cat">
-        <option>Tecnología</option>
-        <option>Alimentos</option>
-        <option>Bebidas</option>
-        <option>Hogar</option>
-        <option>Deportes</option>
-        <option>Belleza y cuidado</option>
-        <option>Mascotas</option>
-        <option>Ofertas de la semana</option>
+    <div id="panelDiv" style="display:none">
+      <h3>Agregar Producto</h3>
+      <input id="n" placeholder="Nombre del producto">
+      <input id="pr" type="number" placeholder="Precio de venta (ej 2700)">
+      <textarea id="d" placeholder="Descripción"></textarea>
+      <input id="u" type="number" placeholder="Unidades disponibles">
+      <select id="c">
+        <option>Tecnología</option><option>Alimentos</option><option>Bebidas</option>
+        <option>Hogar</option><option>Deportes</option><option>Belleza</option>
+        <option>Mascotas</option><option>Ofertas de la semana</option>
       </select>
-      <input id="p-foto" placeholder="URL de la foto principal">
-      <input id="p-foto2" placeholder="URL foto 2 (para carrusel)">
-      <input id="p-foto3" placeholder="URL foto 3 (para carrusel)">
+      <input id="f" placeholder="URL Foto principal">
+      <input id="f2" placeholder="URL Foto 2 para carrusel">
+      <input id="f3" placeholder="URL Foto 3 para carrusel">
       <button onclick="guardar()">Guardar Producto</button>
-      <h3>Productos cargados</h3>
-      <table><tr><th>Nombre</th><th>Precio</th><th>Cat</th><th>Stock</th><th>Acción</th></tr><tbody id="tabla"></tbody></table>
-      <button onclick="cerrar()" style="background:#888;margin-top:15px">Cerrar Panel</button>
+      <h3>Productos</h3>
+      <table><tr><th>Nombre</th><th>Precio</th><th>Cat</th><th>Stock</th><th></th></tr><tbody id="tab"></tbody></table>
+      <button onclick="cerrar()" style="background:#888">Cerrar</button>
     </div>
   </div>
 </div>
 
 <script>
-function abrirAdmin(){document.getElementById('adminModal').style.display='flex'}
-function cerrar(){document.getElementById('adminModal').style.display='none'}
+function abrir(){document.getElementById('modal').style.display='flex'}
+function cerrar(){document.getElementById('modal').style.display='none'}
 function entrar(){
   if(document.getElementById('pass').value==="Santifina"){
-    document.getElementById('loginAdmin').style.display='none';
-    document.getElementById('panelAdmin').style.display='block';
+    document.getElementById('loginDiv').style.display='none';
+    document.getElementById('panelDiv').style.display='block';
     listar();
   } else {document.getElementById('err').innerText='Contraseña incorrecta'}
 }
 function guardar(){
-  let p={nombre:document.getElementById('p-nombre').value,precio:document.getElementById('p-precio').value,desc:document.getElementById('p-desc').value,unidades:document.getElementById('p-unidades').value,cat:document.getElementById('p-cat').value,foto:document.getElementById('p-foto').value};
-  let todos=JSON.parse(localStorage.getItem('marketpro')||'[]');
-  todos.push(p);
-  localStorage.setItem('marketpro',JSON.stringify(todos));
-  listar(); alert('Producto guardado y visible en tu panel');
+  let p={n:document.getElementById('n').value,pr:document.getElementById('pr').value,d:document.getElementById('d').value,u:document.getElementById('u').value,c:document.getElementById('c').value,f:document.getElementById('f').value};
+  let t=JSON.parse(localStorage.getItem('market3a')||'[]');
+  t.push(p); localStorage.setItem('market3a',JSON.stringify(t));
+  listar(); alert('Producto guardado en MARKET3A');
 }
 function listar(){
-  let todos=JSON.parse(localStorage.getItem('marketpro')||'[]');
-  document.getElementById('tabla').innerHTML=todos.map((x,i)=>`<tr><td>${x.nombre}</td><td>$${x.precio}</td><td>${x.cat}</td><td>${x.unidades}</td><td><button onclick="borrar(${i})">Borrar</button></td></tr>`).join('');
+  let t=JSON.parse(localStorage.getItem('market3a')||'[]');
+  document.getElementById('tab').innerHTML=t.map((x,i)=>`<tr><td>${x.n}</td><td>$${x.pr}</td><td>${x.c}</td><td>${x.u}</td><td><button onclick="borrar(${i})">Borrar</button></td></tr>`).join('');
 }
-function borrar(i){
-  let todos=JSON.parse(localStorage.getItem('marketpro')||'[]');
-  todos.splice(i,1);
-  localStorage.setItem('marketpro',JSON.stringify(todos));
-  listar();
-}
+function borrar(i){let t=JSON.parse(localStorage.getItem('market3a')||'[]');t.splice(i,1);localStorage.setItem('market3a',JSON.stringify(t));listar();}
 </script>
 </body>
 </html>
