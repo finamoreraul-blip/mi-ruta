@@ -2,112 +2,252 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>MiRuta Completo</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MarketPro - Tu marketplace de confianza</title>
 <style>
-*{box-sizing:border-box}html,body{margin:0;height:100%;font-family:Roboto,Arial}
-#map{height:100vh;width:100%;background:#202020;touch-action:none}
-.buscador{position:absolute;top:10px;left:10px;right:10px;z-index:1000;background:#fff;border-radius:14px;padding:10px;box-shadow:0 2px 10px rgba(0,0,0,.3);max-height:82vh;overflow:auto;transition:transform.3s}
-.buscador.oculto{transform:translateY(-120%)}
-#btnAbrir{display:none;position:absolute;top:10px;left:10px;z-index:1001;background:#fff;border:none;border-radius:12px;padding:10px 14px;box-shadow:0 2px 8px rgba(0,0,0,.3);font-size:15px}
-.buscador input,.buscador select{width:100%;padding:10px;margin:4px 0;border:1px solid #ddd;border-radius:10px;font-size:15px}
-.fila2{display:flex;gap:6px}.fila2>div{flex:1}
-.fila{display:flex;gap:6px;margin-top:6px}.fila button{flex:1;padding:11px;border:none;border-radius:10px;font-size:15px}
-.btn-ir{background:#1a73e8;color:#fff}.btn-gps{background:#f1f3f4}
-.btn-calcular{width:100%;margin-top:6px;padding:13px;border:none;border-radius:10px;background:#0f9d58;color:#fff;font-size:16px;font-weight:bold}
-#llegadaBox{display:none;margin-top:8px;background:#e8f5e9;border-radius:10px;padding:12px;text-align:center;font-size:17px}
-.ruta-info{display:none;margin-top:8px;border-top:1px solid #eee;padding-top:8px}
-.ruta-card{padding:10px;border-radius:10px;margin:6px 0;background:#f8f9fa;border-left:6px solid #1a73e8}
-.alerta{background:#fff3cd;border:1px solid #ff9800;border-radius:10px;padding:8px;margin:6px 0;font-size:14px}
-.mini-resumen{position:absolute;bottom:20px;left:10px;right:70px;z-index:1000;background:#fff;border-radius:12px;padding:10px 12px;box-shadow:0 2px 8px rgba(0,0,0,.3);display:none;font-size:15px}
-.fab{position:absolute;z-index:1000;border:none;border-radius:50%;width:44px;height:44px;font-size:20px;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.3)}
-#btnSat{bottom:20px;right:12px;background:#333;color:#fff}#btnRep{bottom:70px;right:12px;background:#ff9800;color:#fff}
-.panel-rep{position:absolute;bottom:120px;right:12px;z-index:1001;background:#fff;border-radius:12px;padding:8px;display:none;box-shadow:0 2px 8px rgba(0,0,0,.3)}
-.panel-rep button{display:block;width:160px;margin:4px 0;padding:9px;border:none;border-radius:8px;background:#f5f5f5;font-size:14px}
-.zona-label{background:#ff9800;color:#fff;border:none;border-radius:6px;padding:2px 6px;font-size:12px}
+*{font-family:Arial,sans-serif;box-sizing:border-box}
+body{margin:0;background:#f4f6fb;color:#111}
+header{background:white;padding:12px 25px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10;box-shadow:0 2px 10px rgba(0,0,0,0.1)}
+.logo{font-size:30px;font-weight:bold;color:#0b5fff}
+.logo span{color:#00b4d8}
+nav a{margin:0 8px;text-decoration:none;color:#222;font-weight:600;font-size:14px}
+nav a:hover{color:#0b5fff}
+.search{display:flex;gap:8px}
+.search input{padding:10px 15px;border-radius:25px;border:1px solid #ccc;width:280px}
+.search button{background:#0b5fff;color:white;border:none;padding:10px 20px;border-radius:25px;font-weight:bold;cursor:pointer}
+.banner{background:linear-gradient(90deg,#0b5fff,#00b4d8);color:white;padding:50px 30px;margin:20px;border-radius:20px;display:flex;justify-content:space-between;align-items:center}
+.banner h1{font-size:38px;margin:0 0 10px 0}
+.banner p{font-size:17px;max-width:550px}
+.btn-orange{background:#ff7a1a;color:white;border:none;padding:12px 25px;border-radius:25px;font-weight:bold;cursor:pointer;margin-right:10px}
+.btn-white{background:transparent;color:white;border:2px solid white;padding:12px 25px;border-radius:25px;font-weight:bold;cursor:pointer}
+h2.titulo{font-size:28px;margin:30px 20px 5px 20px;color:#0b2a5b}
+p.sub{margin:0 20px 15px 20px;color:#555}
+.cats{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;padding:0 20px}
+.cat{background:white;padding:18px;border-radius:14px;box-shadow:0 2px 8px rgba(0,0,0,0.07);display:flex;align-items:center;gap:12px}
+.cat .icon{font-size:28px;background:#eef4ff;padding:12px;border-radius:12px}
+.cat small{color:#666}
+.productos{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;padding:20px}
+.card{background:white;border-radius:16px;padding:15px;box-shadow:0 4px 12px rgba(0,0,0,0.08)}
+.card img{width:100%;height:190px;object-fit:cover;border-radius:12px}
+.thumbs{display:flex;gap:6px;margin:8px 0}
+.thumbs img{width:45px;height:45px;border-radius:8px;cursor:pointer;border:2px solid transparent}
+.thumbs img:hover{border-color:#0b5fff}
+.precio{color:#0b5fff;font-size:22px;font-weight:bold;margin:5px 0}
+.card p{font-size:14px;color:#333;margin:6px 0}
+.unidades{background:#eef2ff;border-radius:20px;padding:5px 12px;font-size:13px;display:inline-block;margin-top:8px}
+.btn-buy{background:#0b5fff;color:white;border:none;width:100%;padding:12px;border-radius:25px;font-weight:bold;margin-top:10px;cursor:pointer}
+.beneficios{display:flex;justify-content:space-around;background:white;margin:20px;padding:25px;border-radius:16px;text-align:center}
+.beneficios div{flex:1}
+.testimonios{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;padding:0 20px}
+.test{background:white;padding:18px;border-radius:14px}
+footer{background:#0b2a5b;color:white;padding:30px 20px;margin-top:30px;text-align:center}
+footer a{color:#9ecbff;margin:0 10px;text-decoration:none}
+
+/* PANEL ADMIN */
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);justify-content:center;align-items:center;z-index:20}
+.modal-content{background:white;color:#111;padding:25px;border-radius:16px;width:600px;max-height:90vh;overflow:auto}
+.modal-content input,.modal-content select,.modal-content textarea{width:100%;padding:10px;margin:6px 0;border-radius:8px;border:1px solid #ccc}
+.modal-content button{background:#0b5fff;color:white;border:none;padding:10px 18px;border-radius:20px;cursor:pointer;margin-top:8px}
+#gear{position:fixed;bottom:20px;right:20px;background:white;width:55px;height:55px;border-radius:50%;display:flex;justify-content:center;align-items:center;font-size:28px;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,0.2);z-index:15}
+table{width:100%;border-collapse:collapse;margin-top:10px}
+table,th,td{border:1px solid #ddd;padding:8px;font-size:13px}
 </style>
 </head>
 <body>
-<div id="map"></div>
-<button id="btnAbrir" onclick="mostrarPanel()">🔍 Buscar ruta</button>
-<div class="buscador" id="panelBusc">
-<div style="display:flex;justify-content:space-between;align-items:center"><b>MiRuta</b><button onclick="ocultarPanel()" style="border:none;background:#f1f3f4;border-radius:8px;padding:6px 10px">Ocultar</button></div>
-<input id="origenTxt" value="Tres Arroyos" placeholder="📍 Origen">
-<input id="destinoTxt" value="Coronel Pringles" placeholder="🏁 Destino">
-<div class="fila2">
-<div><label style="font-size:13px">¿A qué velocidad viajas?</label><select id="vel"><option value="60">60 km/h Camión</option><option value="80">80 km/h Tranquilo</option><option value="100" selected>100 km/h Normal</option><option value="110">110 km/h Rápido</option><option value="120">120 km/h Máx</option></select></div>
-<div><label style="font-size:13px">¿A qué hora salís?</label><input type="time" id="horaSal" value="08:00"></div>
+
+<header>
+  <div class="logo">Market<span>Pro</span></div>
+  <nav>
+    <a href="#tec">Tecnología</a>
+    <a href="#ali">Alimentos</a>
+    <a href="#beb">Bebidas</a>
+    <a href="#hog">Hogar</a>
+    <a href="#dep">Deportes</a>
+    <a href="#bel">Belleza</a>
+    <a href="#mas">Mascotas</a>
+    <a href="#ofe">Ofertas</a>
+  </nav>
+  <div class="search">
+    <input placeholder="Buscar productos, marcas y más...">
+    <button>Buscar</button>
+  </div>
+</header>
+
+<div class="banner">
+  <div>
+    <h1>Tu marketplace de confianza</h1>
+    <p>Compra productos de vendedores verificados. Miles de artículos en Tecnología, Alimentos, Bebidas, Hogar y más, con envío a todo el país.</p>
+    <button class="btn-orange">Ver ofertas de la semana</button>
+    <button class="btn-white">Cómo vender</button>
+  </div>
+  <div style="font-size:80px">🛒</div>
 </div>
-<div class="fila"><button class="btn-gps" onclick="usarGPS()">📍 Mi ubicación</button><button class="btn-ir" onclick="buscarRuta()">Cómo llegar</button></div>
-<button class="btn-calcular" onclick="calcularLlegada()">⏱️ CALCULAR LLEGADA</button>
-<div id="llegadaBox"></div>
-<div id="rutaInfo" class="ruta-info"></div>
+
+<h2 class="titulo">Categorías</h2>
+<p class="sub">Explora las 8 categorías disponibles</p>
+<div class="cats">
+  <div class="cat"><div class="icon">💻</div><div><b>Tecnología</b><br><small>450+ productos</small></div></div>
+  <div class="cat"><div class="icon">🥑</div><div><b>Alimentos</b><br><small>320+ productos</small></div></div>
+  <div class="cat"><div class="icon">🥤</div><div><b>Bebidas</b><br><small>180+ productos</small></div></div>
+  <div class="cat"><div class="icon">🏠</div><div><b>Hogar</b><br><small>290+ productos</small></div></div>
+  <div class="cat"><div class="icon">⚽</div><div><b>Deportes</b><br><small>210+ productos</small></div></div>
+  <div class="cat"><div class="icon">💄</div><div><b>Belleza y cuidado</b><br><small>380+ productos</small></div></div>
+  <div class="cat"><div class="icon">🐾</div><div><b>Mascotas</b><br><small>150+ productos</small></div></div>
+  <div class="cat" style="background:#ff7a1a;color:white"><div class="icon" style="background:white">🏷️</div><div><b>Ofertas de la semana</b><br><small>120+ ofertas HOT</small></div></div>
 </div>
-<div id="miniResumen" class="mini-resumen" onclick="mostrarPanel()"></div>
-<button id="btnSat" class="fab" onclick="cambiarVista()">🛰️</button>
-<button id="btnRep" class="fab" onclick="toggleRep()">⚠️</button>
-<div id="panelRep" class="panel-rep">
-<button onclick="reportar('🕳️ Pozo')">🕳️ Pozo</button>
-<button onclick="reportar('🌫️ Niebla')">🌫️ Niebla</button>
-<button onclick="reportar('🐄 Animal suelto')">🐄 Animal</button>
-<button onclick="reportar('🚧 Corte')">🚧 Corte</button>
-<button onclick="reportar('🌧️ Lluvia')">🌧️ Lluvia</button>
+
+<h2 class="titulo">Productos destacados</h2>
+<p class="sub">Los más vendidos esta semana, seleccionados para ti</p>
+<div class="productos" id="grid">
+
+  <div class="card" id="tec">
+    <img src="https://via.placeholder.com/400x300?text=Auriculares" id="img1">
+    <div class="thumbs">
+      <img src="https://via.placeholder.com/400x300?text=Auriculares" onclick="document.getElementById('img1').src=this.src">
+      <img src="https://via.placeholder.com/400x300?text=Foto+2" onclick="document.getElementById('img1').src=this.src">
+      <img src="https://via.placeholder.com/400x300?text=Foto+3" onclick="document.getElementById('img1').src=this.src">
+    </div>
+    <small>Tecnología</small>
+    <h3>Auriculares Bluetooth Pro</h3>
+    <div class="precio">$49.990</div>
+    <p>Cancelación de ruido, 30hs batería, Bluetooth 5.3. Cómodo y plegable.</p>
+    <span class="unidades">Unidades: 15 disponibles</span>
+    <button class="btn-buy">Comprar</button>
+  </div>
+
+  <div class="card" id="ali">
+    <img src="https://via.placeholder.com/400x300?text=Cafe+Gourmet" id="img2">
+    <div class="thumbs">
+      <img src="https://via.placeholder.com/400x300?text=Cafe+Gourmet" onclick="document.getElementById('img2').src=this.src">
+      <img src="https://via.placeholder.com/400x300?text=Foto+2" onclick="document.getElementById('img2').src=this.src">
+    </div>
+    <small>Alimentos</small>
+    <h3>Café Gourmet 500g</h3>
+    <div class="precio">$12.500</div>
+    <p>Tostado premium, grano 100% arábica. Ideal para espresso y filtrado.</p>
+    <span class="unidades">Unidades: 30 disponibles</span>
+    <button class="btn-buy">Comprar</button>
+  </div>
+
+  <div class="card" id="beb">
+    <img src="https://via.placeholder.com/400x300?text=Botella+Termica" id="img3">
+    <div class="thumbs">
+      <img src="https://via.placeholder.com/400x300?text=Botella+Termica" onclick="document.getElementById('img3').src=this.src">
+      <img src="https://via.placeholder.com/400x300?text=Foto+2" onclick="document.getElementById('img3').src=this.src">
+    </div>
+    <small>Bebidas</small>
+    <h3>Botella Térmica 1L Acero</h3>
+    <div class="precio">$18.990</div>
+    <p>Mantiene frío 24hs, calor 12hs. Pico cebador incluido, acero inoxidable.</p>
+    <span class="unidades">Unidades: 20 disponibles</span>
+    <button class="btn-buy">Comprar</button>
+  </div>
+
+  <div class="card" id="hog">
+    <img src="https://via.placeholder.com/400x300?text=Set+Organizador" id="img4">
+    <div class="thumbs">
+      <img src="https://via.placeholder.com/400x300?text=Set+Organizador" onclick="document.getElementById('img4').src=this.src">
+      <img src="https://via.placeholder.com/400x300?text=Foto+2" onclick="document.getElementById('img4').src=this.src">
+    </div>
+    <small>Hogar</small>
+    <h3>Set Organizador Cocina x5</h3>
+    <div class="precio">$22.990</div>
+    <p>Organizadores apilables, material resistente, ideal para cocina y despensa.</p>
+    <span class="unidades">Unidades: 10 disponibles</span>
+    <button class="btn-buy">Comprar</button>
+  </div>
+
 </div>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<div class="beneficios">
+  <div>🚚<br><b>Envío a todo el país</b><br><small>24 a 72hs</small></div>
+  <div>🛡️<br><b>Compra protegida</b><br><small>Garantía total</small></div>
+  <div>💳<br><b>Pagá como quieras</b><br><small>Tarjeta, transferencia, efectivo</small></div>
+  <div>📞<br><b>Soporte 24/7</b><br><small>Siempre te ayudamos</small></div>
+</div>
+
+<h2 class="titulo">Ofertas de la semana</h2>
+<p class="sub">Precios rebajados solo hasta el domingo</p>
+<div class="productos">
+  <div class="card"><img src="https://via.placeholder.com/400x300?text=Oferta+1"><small>Ofertas</small><h3>Parlante Bluetooth Grande</h3><div class="precio" style="color:#ff7a1a">$29.990 <s style="color:#999;font-size:14px">$45.000</s></div><p>Sonido potente, resistente al agua, 12hs de batería.</p><span class="unidades">Unidades: 5 disponibles</span><button class="btn-buy" style="background:#ff7a1a">Aprovechar</button></div>
+  <div class="card"><img src="https://via.placeholder.com/400x300?text=Oferta+2"><small>Ofertas</small><h3>Kit Skincare Facial</h3><div class="precio" style="color:#ff7a1a">$15.990 <s style="color:#999;font-size:14px">$25.000</s></div><p>Rutina completa: limpieza, hidratante y protector.</p><span class="unidades">Unidades: 12 disponibles</span><button class="btn-buy" style="background:#ff7a1a">Aprovechar</button></div>
+</div>
+
+<h2 class="titulo">Qué dicen nuestros clientes</h2>
+<div class="testimonios">
+  <div class="test"><b>★★★</b><p>"Llegó rapidísimo y tal cual la foto. La página es muy clara."</p><small>Mariana, Buenos Aires</small></div>
+  <div class="test"><b>★★★</b><p>"Compré la botella térmica y es de muy buena calidad. Vuelvo a comprar."</p><small>Diego, Córdoba</small></div>
+  <div class="test"><b>★★★</b><p>"Muy buena atención y el producto igual al de la descripción."</p><small>Lucía, Rosario</small></div>
+</div>
+
+<footer>
+  <p><b>MarketPro</b> © 2026 - Marketplace - Vende con nosotros - Políticas - Contacto - Soporte 24/7</p>
+  <p><a href="#">Términos</a> <a href="#">Privacidad</a> <a href="#">Ayuda</a></p>
+</footer>
+
+<div id="gear" onclick="abrirAdmin()">⚙️</div>
+
+<div class="modal" id="adminModal">
+  <div class="modal-content">
+    <h2>Panel Admin - Acceso Total</h2>
+    <div id="loginAdmin">
+      <input id="pass" type="password" placeholder="Contraseña">
+      <button onclick="entrar()">Entrar al Panel</button>
+      <p id="err" style="color:red"></p>
+    </div>
+    <div id="panelAdmin" style="display:none">
+      <h3>Agregar / Editar Producto</h3>
+      <input id="p-nombre" placeholder="Nombre del producto">
+      <input id="p-precio" type="number" placeholder="Precio (ej 2700)">
+      <textarea id="p-desc" placeholder="Descripción completa"></textarea>
+      <input id="p-unidades" type="number" placeholder="Unidades disponibles">
+      <select id="p-cat">
+        <option>Tecnología</option>
+        <option>Alimentos</option>
+        <option>Bebidas</option>
+        <option>Hogar</option>
+        <option>Deportes</option>
+        <option>Belleza y cuidado</option>
+        <option>Mascotas</option>
+        <option>Ofertas de la semana</option>
+      </select>
+      <input id="p-foto" placeholder="URL de la foto principal">
+      <input id="p-foto2" placeholder="URL foto 2 (para carrusel)">
+      <input id="p-foto3" placeholder="URL foto 3 (para carrusel)">
+      <button onclick="guardar()">Guardar Producto</button>
+      <h3>Productos cargados</h3>
+      <table><tr><th>Nombre</th><th>Precio</th><th>Cat</th><th>Stock</th><th>Acción</th></tr><tbody id="tabla"></tbody></table>
+      <button onclick="cerrar()" style="background:#888;margin-top:15px">Cerrar Panel</button>
+    </div>
+  </div>
+</div>
+
 <script>
-var osm=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,keepBuffer:8});
-var sat=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,maxNativeZoom:18,detectRetina:true,keepBuffer:8});
-var map=L.map('map',{layers:[osm],zoomControl:false}).setView([-38.2,-60.7],9);
-L.control.zoom({position:'bottomleft'}).addTo(map);
-var esSat=false,capaRutas=L.layerGroup().addTo(map),capaRep=L.layerGroup().addTo(map),miPos=null;
-function cambiarVista(){if(esSat){map.removeLayer(sat);map.addLayer(osm);}else{map.removeLayer(osm);map.addLayer(sat);}esSat=!esSat;}
-function toggleRep(){var p=document.getElementById('panelRep');p.style.display=p.style.display=='block'?'none':'block';}
-function ocultarPanel(){document.getElementById('panelBusc').classList.add('oculto');document.getElementById('btnAbrir').style.display='block';}
-function mostrarPanel(){document.getElementById('panelBusc').classList.remove('oculto');document.getElementById('btnAbrir').style.display='none';document.getElementById('miniResumen').style.display='none';}
-var zonas=[
-{lat:-38.25,lng:-60.9,t:"Niebla frecuente",d:"Bajo con niebla densa 5-9 AM. Reducí a 60 km/h y usá balizas.",tipo:"niebla"},
-{lat:-38.05,lng:-61.1,t:"Animales sueltos",d:"RP85 con animales sueltos. Peligro nocturno 19 a 06h. Máx 80.",tipo:"animal"},
-{lat:-37.95,lng:-60.65,t:"Pozos graves",d:"12 reportes de pozos. Precaución, máx 80 km/h.",tipo:"pozo"}
-];
-zonas.forEach(z=>{var c=L.circle([z.lat,z.lng],{radius:4500,color:z.tipo=='animal'?'red':'orange',weight:2,fillOpacity:0.18}).addTo(map);c.bindPopup("<b>⚠️ "+z.t+"</b><br>"+z.d);map.on('zoomend',function(){if(map.getZoom()>=11){c.bindTooltip(z.t,{permanent:true,direction:'center',className:'zona-label'}).openTooltip();}else{c.unbindTooltip();}});});
-var reps=JSON.parse(localStorage.getItem('reps')||'[]');reps.forEach(function(r){L.marker([r.lat,r.lng]).addTo(capaRep).bindPopup(r.tipo);});
-function usarGPS(){navigator.geolocation.getCurrentPosition(function(p){miPos=[p.coords.latitude,p.coords.longitude];document.getElementById('origenTxt').value="Mi ubicación";L.marker(miPos).addTo(map).bindPopup("Estás aquí").openPopup();map.setView(miPos,13);});}
-async function getCoords(t){if(t=="Mi ubicación"&&miPos)return miPos;var r=await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q='+encodeURIComponent(t+", Buenos Aires, Argentina"));var j=await r.json();return[parseFloat(j[0].lat),parseFloat(j[0].lon)];}
-async function buscarRuta(){
-var box=document.getElementById('rutaInfo');box.style.display='block';box.innerHTML='Buscando...';
-var o=await getCoords(document.getElementById('origenTxt').value),d=await getCoords(document.getElementById('destinoTxt').value);
-var r=await fetch("https://router.project-osrm.org/route/v1/driving/"+o[1]+","+o[0]+";"+d[1]+","+d[0]+"?overview=full&geometries=geojson&alternatives=2");
-var j=await r.json();capaRutas.clearLayers();var html='';
-j.routes.slice(0,2).forEach(function(rt,i){var km=rt.distance/1000,col=i==0?'#1a73e8':'#0f9d58';L.geoJSON(rt.geometry,{style:{color:col,weight:6}}).addTo(capaRutas);html+='<div class="ruta-card" style="border-left-color:'+col+'"><b>'+km.toFixed(1)+' km</b> · '+(rt.duration/60).toFixed(0)+' min<div style="font-size:13px;color:#666">'+(i==0?'Ruta principal':'Ruta alternativa')+'</div></div>';});
-box.innerHTML=html;map.fitBounds(capaRutas.getBounds(),{padding:[30,30]});
+function abrirAdmin(){document.getElementById('adminModal').style.display='flex'}
+function cerrar(){document.getElementById('adminModal').style.display='none'}
+function entrar(){
+  if(document.getElementById('pass').value==="Santifina"){
+    document.getElementById('loginAdmin').style.display='none';
+    document.getElementById('panelAdmin').style.display='block';
+    listar();
+  } else {document.getElementById('err').innerText='Contraseña incorrecta'}
 }
-async function calcularLlegada(){
-var vel=parseInt(document.getElementById('vel').value),horaSal=document.getElementById('horaSal').value;
-var hm=horaSal.split(':'),h=parseInt(hm[0]),m=parseInt(hm[1]);
-var box=document.getElementById('llegadaBox');box.style.display='block';box.innerHTML='Calculando...';
-try{
-var o=await getCoords(document.getElementById('origenTxt').value),d=await getCoords(document.getElementById('destinoTxt').value);
-var r=await fetch("https://router.project-osrm.org/route/v1/driving/"+o[1]+","+o[0]+";"+d[1]+","+d[0]+"?overview=full&geometries=geojson&alternatives=2");
-var j=await r.json();capaRutas.clearLayers();
-var rt=j.routes[0],km=rt.distance/1000,minTot=Math.round(km/vel*60);
-var lleg=h*60+m+minTot,lh=Math.floor(lleg/60)%24,lm=lleg%60;
-var llegada=(lh<10?'0':'')+lh+':'+(lm<10?'0':'')+lm;
-L.geoJSON(rt.geometry,{style:{color:'#1a73e8',weight:6}}).addTo(capaRutas);
-var alertas='';
-if(lh>=19||lh<6) alertas+='<div class="alerta">🌙 Vas a llegar de noche ('+llegada+'). <b>Ojo animales sueltos</b> en RP85. Baja a 80.</div>';
-if(h>=5&&h<=9) alertas+='<div class="alerta">🌫️ Salís en horario de niebla (5-9 AM). Precaución en el bajo.</div>';
-if(vel>100) alertas+='<div class="alerta">⚠️ A '+vel+' km/h con pozos reportados es riesgoso.</div>';
-box.innerHTML='🚗 Salís <b>'+horaSal+'</b> a '+vel+' km/h<br>📏 Son <b>'+km.toFixed(1)+' km</b><br>⏱️ Tardás <b>'+minTot+' min</b><div style="font-size:22px;margin:8px 0">🏁 <b>Vas a llegar a las '+llegada+'</b></div>'+alertas;
-var box2=document.getElementById('rutaInfo');box2.style.display='block';
-box2.innerHTML='<div class="ruta-card"><b>'+km.toFixed(1)+' km</b> · '+minTot+' min<div style="font-size:13px">Salida '+horaSal+' → Llegada '+llegada+'</div></div>'+alertas;
-map.fitBounds(capaRutas.getBounds(),{padding:[40,40]});
-setTimeout(function(){ocultarPanel();var mini=document.getElementById('miniResumen');mini.style.display='block';mini.innerHTML='🏁 <b>Vas a llegar a las '+llegada+'</b><br><span style="font-size:13px">'+km.toFixed(1)+' km · '+minTot+' min · Tocá para ver detalle</span>';},800);
-}catch(e){box.innerHTML='No pude calcular. Revisá origen/destino.';}
+function guardar(){
+  let p={nombre:document.getElementById('p-nombre').value,precio:document.getElementById('p-precio').value,desc:document.getElementById('p-desc').value,unidades:document.getElementById('p-unidades').value,cat:document.getElementById('p-cat').value,foto:document.getElementById('p-foto').value};
+  let todos=JSON.parse(localStorage.getItem('marketpro')||'[]');
+  todos.push(p);
+  localStorage.setItem('marketpro',JSON.stringify(todos));
+  listar(); alert('Producto guardado y visible en tu panel');
 }
-function reportar(tipo){
-function save(lat,lng){var rs=JSON.parse(localStorage.getItem('reps')||'[]');rs.push({lat:lat,lng:lng,tipo:tipo});localStorage.setItem('reps',JSON.stringify(rs));L.marker([lat,lng]).addTo(capaRep).bindPopup("<b>"+tipo+"</b>").openPopup();toggleRep();}
-navigator.geolocation.getCurrentPosition(function(p){save(p.coords.latitude,p.coords.longitude);},function(){var c=map.getCenter();save(c.lat,c.lng);});
+function listar(){
+  let todos=JSON.parse(localStorage.getItem('marketpro')||'[]');
+  document.getElementById('tabla').innerHTML=todos.map((x,i)=>`<tr><td>${x.nombre}</td><td>$${x.precio}</td><td>${x.cat}</td><td>${x.unidades}</td><td><button onclick="borrar(${i})">Borrar</button></td></tr>`).join('');
+}
+function borrar(i){
+  let todos=JSON.parse(localStorage.getItem('marketpro')||'[]');
+  todos.splice(i,1);
+  localStorage.setItem('marketpro',JSON.stringify(todos));
+  listar();
 }
 </script>
 </body>
