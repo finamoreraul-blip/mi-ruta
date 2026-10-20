@@ -15,8 +15,7 @@ header{background:#fff;padding:14px 24px;display:flex;justify-content:space-betw
 nav{display:flex;gap:6px;flex-wrap:wrap}
 nav button{background:none;border:none;color:#0b2a5b;font-weight:700;font-size:14px;cursor:pointer;padding:8px 10px;border-radius:8px}
 nav button:hover, nav button.active{background:#0b5fff;color:#fff}
-.header-actions{display:flex;align-items:center;gap:12px}
-.btn-login{border:2px solid #0b5fff;color:#0b5fff;background:#fff;padding:9px 18px;border-radius:25px;font-weight:800;cursor:pointer}
+.header-actions{display:flex;align-items:center;gap:12px;font-size:20px}
 .menu-btn{display:none;background:#0b5fff;color:#fff;border:none;padding:8px 14px;border-radius:8px;font-size:20px;cursor:pointer}
 .banner{background:linear-gradient(90deg,#0b3d91,#0b5fff);color:#fff;padding:50px 24px}
 .banner h1{font-size:40px;margin-bottom:12px}
@@ -38,7 +37,6 @@ p.sub{color:#555;margin-bottom:16px}
 .card img.main{width:100%;height:200px;object-fit:cover;border-radius:12px}
 .thumbs{display:flex;gap:6px;margin:8px 0}
 .thumbs img{width:50px;height:50px;border-radius:8px;cursor:pointer;object-fit:cover;border:2px solid transparent}
-.thumbs img:hover{border-color:#0b5fff}
 .tag{background:#e8eefc;color:#0b5fff;font-size:11px;font-weight:800;padding:4px 8px;border-radius:6px;text-transform:uppercase}
 .card h3{margin:8px 0 4px 0;font-size:16px}
 .card p.desc{font-size:13px;color:#444;min-height:36px}
@@ -56,9 +54,12 @@ footer a{color:#9ecbff;text-decoration:none;display:block;margin:6px 0}
 .modal-content h2{color:#0b2a5b;margin-bottom:12px}
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
 .modal-content input,.modal-content select,.modal-content textarea{width:100%;padding:11px;margin:6px 0;border-radius:8px;border:1px solid #ccc;font-size:14px}
+.modal-content input[type=file]{background:#f4f6fb;padding:10px}
 .modal-content button{background:#0b5fff;color:#fff;border:none;padding:11px 20px;border-radius:20px;cursor:pointer;font-weight:700;margin-top:8px}
 .preview-box{background:#f4f6fb;border:2px dashed #0b5fff;border-radius:16px;padding:14px;position:sticky;top:0}
 .preview-box h4{margin-bottom:10px;color:#0b5fff}
+.file-preview{display:flex;gap:8px;margin:8px 0}
+.file-preview img{width:70px;height:70px;object-fit:cover;border-radius:8px;border:2px solid #0b5fff}
 table{width:100%;border-collapse:collapse;margin-top:12px}
 th,td{border:1px solid #ddd;padding:8px;font-size:13px;text-align:left}
 .borrar{background:#dc3545 !important;padding:6px 12px !important;border-radius:12px !important}
@@ -103,8 +104,7 @@ header{flex-direction:column;align-items:flex-start}
     <button onclick="filtrar('Ofertas')">Ofertas</button>
   </nav>
   <div class="header-actions">
-    <span style="font-size:20px">🛒</span>
-    <button class="btn-login">Iniciar sesión</button>
+    <span>🛒</span>
   </div>
 </header>
 
@@ -161,7 +161,7 @@ header{flex-direction:column;align-items:flex-start}
 <div id="gear" onclick="abrir()">⚙️</div>
 <div class="modal" id="modal">
   <div class="modal-content">
-    <h2>Panel Admin MARKET3A - Subir con vista previa</h2>
+    <h2>Panel Admin MARKET3A - Subir por archivo</h2>
     <div id="loginDiv">
       <input id="pass" type="password" placeholder="Contraseña">
       <button onclick="entrar()">Entrar</button>
@@ -185,9 +185,18 @@ header{flex-direction:column;align-items:flex-start}
             <option>Mascotas</option>
             <option>Ofertas</option>
           </select>
-          <input id="f" placeholder="URL Foto principal" oninput="actualizarVistaPrevia()">
-          <input id="f2" placeholder="URL Foto 2 para carrusel (opcional)" oninput="actualizarVistaPrevia()">
-          <input id="f3" placeholder="URL Foto 3 para carrusel (opcional)" oninput="actualizarVistaPrevia()">
+
+          <h4>Foto principal (obligatoria)</h4>
+          <input type="file" id="fFile" accept="image/*" onchange="cargarFoto(this,'f')">
+
+          <h4>Foto 2 para carrusel (opcional)</h4>
+          <input type="file" id="f2File" accept="image/*" onchange="cargarFoto(this,'f2')">
+
+          <h4>Foto 3 para carrusel (opcional)</h4>
+          <input type="file" id="f3File" accept="image/*" onchange="cargarFoto(this,'f3')">
+
+          <div class="file-preview" id="filePreview"></div>
+
           <button onclick="guardar()">Guardar Producto</button>
         </div>
         <div class="preview-box">
@@ -216,6 +225,7 @@ header{flex-direction:column;align-items:flex-start}
 
 <script>
 let filtroActual="Todos";
+let archivos={f:null,f2:null,f3:null};
 let categorias=[
   {nombre:"Tecnología",icon:"💻"},
   {nombre:"Alimentos",icon:"🍎"},
@@ -244,6 +254,26 @@ function cambiarFoto(id, src){
   document.getElementById(id).src=src;
 }
 
+function cargarFoto(input, key){
+  if(input.files && input.files[0]){
+    let reader=new FileReader();
+    reader.onload=function(e){
+      archivos[key]=e.target.result;
+      mostrarPreviewsArchivos();
+      actualizarVistaPrevia();
+    }
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+function mostrarPreviewsArchivos(){
+  let html='';
+  if(archivos.f) html+=`<img src="${archivos.f}">`;
+  if(archivos.f2) html+=`<img src="${archivos.f2}">`;
+  if(archivos.f3) html+=`<img src="${archivos.f3}">`;
+  document.getElementById('filePreview').innerHTML=html;
+}
+
 function renderGrid(){
   let todos=getProductos();
   let filtrados = filtroActual==='Todos' ? todos : todos.filter(p=>p.c===filtroActual);
@@ -251,7 +281,7 @@ function renderGrid(){
   if(texto){filtrados=filtrados.filter(p=>p.n.toLowerCase().includes(texto) || (p.d && p.d.toLowerCase().includes(texto)));}
   document.getElementById('contador').innerText=filtrados.length+" productos encontrados"+(filtroActual!=='Todos' ? " en "+filtroActual : "");
   if(filtrados.length===0){
-    document.getElementById('grid').innerHTML=`<div class="vacio"><h3>No hay productos todavía</h3><p>Entrá al panel con el engranaje y contraseña Santifina y subí tu primer producto. Aparecerá acá al instante.</p></div>`;
+    document.getElementById('grid').innerHTML=`<div class="vacio"><h3>No hay productos todavía</h3><p>Entrá al panel con el engranaje y contraseña Santifina y subí tu primer producto por archivo. Aparecerá acá al instante.</p></div>`;
   }else{
     document.getElementById('grid').innerHTML=filtrados.map((p,i)=>{
       let f2=p.f2||p.f;
@@ -281,9 +311,9 @@ function actualizarVistaPrevia(){
   let d=document.getElementById('d').value || "Descripción del producto";
   let u=document.getElementById('u').value || "0";
   let c=document.getElementById('c').value;
-  let f=document.getElementById('f').value || "https://via.placeholder.com/400x300?text=MARKET3A";
-  let f2=document.getElementById('f2').value || f;
-  let f3=document.getElementById('f3').value || f;
+  let f=archivos.f || "https://via.placeholder.com/400x300?text=MARKET3A";
+  let f2=archivos.f2 || f;
+  let f3=archivos.f3 || f;
   document.getElementById('vp-img').src=f;
   document.getElementById('vp-nombre').innerText=n;
   document.getElementById('vp-desc').innerText=d;
@@ -314,12 +344,15 @@ function guardar(){
   let n=document.getElementById('n').value;
   let pr=document.getElementById('pr').value;
   if(!n || !pr){alert('Completá nombre y precio');return;}
-  let p={n:n,pr:pr,d:document.getElementById('d').value,u:document.getElementById('u').value,c:document.getElementById('c').value,f:document.getElementById('f').value,f2:document.getElementById('f2').value,f3:document.getElementById('f3').value};
-  if(!p.f) p.f="https://via.placeholder.com/400x300?text=MARKET3A";
+  if(!archivos.f){alert('Subí al menos la foto principal por archivo');return;}
+  let p={n:n,pr:pr,d:document.getElementById('d').value,u:document.getElementById('u').value,c:document.getElementById('c').value,f:archivos.f,f2:archivos.f2||archivos.f,f3:archivos.f3||archivos.f};
   let t=getProductos();
   t.push(p);
   localStorage.setItem('market3a',JSON.stringify(t));
-  document.getElementById('n').value='';document.getElementById('pr').value='';document.getElementById('d').value='';document.getElementById('u').value='';document.getElementById('f').value='';document.getElementById('f2').value='';document.getElementById('f3').value='';
+  document.getElementById('n').value='';document.getElementById('pr').value='';document.getElementById('d').value='';document.getElementById('u').value='';
+  document.getElementById('fFile').value='';document.getElementById('f2File').value='';document.getElementById('f3File').value='';
+  archivos={f:null,f2:null,f3:null};
+  document.getElementById('filePreview').innerHTML='';
   listarAdmin();
   renderGrid();
   actualizarVistaPrevia();
@@ -341,4 +374,4 @@ renderGrid();
 actualizarVistaPrevia();
 </script>
 </body>
-</html>
+  </html>
