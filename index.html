@@ -5,58 +5,74 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MARKET3A - Marketplace de Tres Arroyos</title>
 <style>
-*{font-family:Arial,sans-serif;box-sizing:border-box}
-body{margin:0;background:#f4f6fb;color:#111}
-header{background:white;padding:12px 30px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10;box-shadow:0 2px 10px rgba(0,0,0,0.1);flex-wrap:wrap}
-.logo{display:flex;align-items:center;gap:10px}
-.logo-icon{font-size:36px;color:#0b5fff}
-.logo-text{font-size:30px;font-weight:900;color:#0b2a5b;line-height:1}
-.logo-text small{display:block;font-size:13px;font-weight:400;color:#555}
-nav{display:flex;gap:10px;flex-wrap:wrap}
-nav a{margin:0 8px;text-decoration:none;color:#0b2a5b;font-weight:700;font-size:14px}
-.header-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-.btn-login{border:2px solid #0b5fff;color:#0b5fff;background:white;padding:8px 18px;border-radius:25px;font-weight:bold;cursor:pointer}
-.menu-btn{display:none;background:#0b5fff;color:white;border:none;padding:8px 14px;border-radius:8px;font-size:20px;cursor:pointer}
-.banner{background:linear-gradient(90deg,#0b3d91,#0b5fff);color:white;padding:45px 30px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap}
-.banner h1{font-size:42px;margin:0 0 12px 0}
-.banner p{font-size:16px;max-width:600px}
-.btn-explorar{background:white;color:#0b5fff;border:none;padding:13px 25px;border-radius:25px;font-weight:bold;cursor:pointer;margin:5px}
-.btn-vender{background:transparent;color:white;border:2px solid white;padding:13px 25px;border-radius:25px;font-weight:bold;cursor:pointer;margin:5px}
-h2.titulo{font-size:30px;margin:35px 20px 5px 20px;color:#0b2a5b}
-p.sub{margin:0 20px 18px 20px;color:#555;font-size:16px}
-.cats{display:grid;grid-template-columns:repeat(8,1fr);gap:12px;padding:0 20px}
-.cat{background:white;padding:16px 8px;border-radius:14px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.07)}
-.cat-icon{width:55px;height:55px;background:#0b5fff;color:white;border-radius:12px;display:flex;justify-content:center;align-items:center;font-size:26px;margin:0 auto 10px auto}
-.productos{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;padding:20px}
-.card{background:white;border-radius:16px;padding:14px;box-shadow:0 4px 14px rgba(0,0,0,0.08)}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,Helvetica,sans-serif}
+body{background:#f4f6fb;color:#111}
+header{background:#fff;padding:14px 24px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10;box-shadow:0 2px 10px rgba(0,0,0,0.1);flex-wrap:wrap;gap:10px}
+.logo{display:flex;align-items:center;gap:12px}
+.logo-icon{width:48px;height:48px;background:#0b5fff;color:#fff;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:28px}
+.logo-text{font-size:28px;font-weight:900;color:#0b2a5b;line-height:1}
+.logo-text small{display:block;font-size:13px;font-weight:400;color:#666}
+nav{display:flex;gap:6px;flex-wrap:wrap}
+nav button{background:none;border:none;color:#0b2a5b;font-weight:700;font-size:14px;cursor:pointer;padding:8px 10px;border-radius:8px}
+nav button:hover, nav button.active{background:#0b5fff;color:#fff}
+.header-actions{display:flex;align-items:center;gap:12px}
+.btn-login{border:2px solid #0b5fff;color:#0b5fff;background:#fff;padding:9px 18px;border-radius:25px;font-weight:800;cursor:pointer}
+.menu-btn{display:none;background:#0b5fff;color:#fff;border:none;padding:8px 14px;border-radius:8px;font-size:20px;cursor:pointer}
+.banner{background:linear-gradient(90deg,#0b3d91,#0b5fff);color:#fff;padding:50px 24px}
+.banner h1{font-size:40px;margin-bottom:12px}
+.banner p{font-size:16px;max-width:620px;margin-bottom:18px}
+.btn-explorar{background:#fff;color:#0b5fff;border:none;padding:13px 26px;border-radius:25px;font-weight:800;cursor:pointer}
+.search-bar{padding:18px 24px;background:#fff}
+.search-bar input{width:100%;padding:14px 18px;border-radius:30px;border:1px solid #ddd;font-size:16px}
+.contenedor{max-width:1200px;margin:0 auto;padding:0 16px}
+h2.titulo{font-size:28px;margin:34px 0 6px 0;color:#0b2a5b}
+p.sub{color:#555;margin-bottom:16px}
+.cats{display:grid;grid-template-columns:repeat(8,1fr);gap:12px}
+.cat{background:#fff;padding:16px 10px;border-radius:14px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.07);cursor:pointer;border:2px solid transparent}
+.cat:hover{border-color:#0b5fff}
+.cat.active{border-color:#0b5fff;background:#eef4ff}
+.cat-icon{width:52px;height:52px;background:#0b5fff;color:#fff;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 8px auto}
+.cat b{font-size:13px;color:#0b2a5b}
+.productos{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;padding-bottom:20px}
+.card{background:#fff;border-radius:16px;padding:14px;box-shadow:0 4px 14px rgba(0,0,0,0.08)}
 .card img.main{width:100%;height:200px;object-fit:cover;border-radius:12px}
 .thumbs{display:flex;gap:6px;margin:8px 0}
 .thumbs img{width:50px;height:50px;border-radius:8px;cursor:pointer;object-fit:cover;border:2px solid transparent}
-.tag{background:#e8eefc;color:#0b5fff;font-size:11px;font-weight:bold;padding:3px 8px;border-radius:6px;text-transform:uppercase}
+.thumbs img:hover{border-color:#0b5fff}
+.tag{background:#e8eefc;color:#0b5fff;font-size:11px;font-weight:800;padding:4px 8px;border-radius:6px;text-transform:uppercase}
 .card h3{margin:8px 0 4px 0;font-size:16px}
-.precio{color:#0b5fff;font-size:22px;font-weight:900;margin:6px 0}
-.unidades{font-size:13px;color:#333;margin-top:6px}
-.btn-carrito{background:#dbe9ff;color:#0b5fff;border:none;width:100%;padding:11px;border-radius:20px;font-weight:bold;margin-top:10px;cursor:pointer}
-.beneficios{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;padding:20px;background:white;margin:20px;border-radius:16px;text-align:center}
-footer{background:#0b2a5b;color:white;padding:35px 25px;margin-top:30px;display:grid;grid-template-columns:2fr 1fr 1fr;gap:20px}
-footer a{color:#9ecbff;text-decoration:none;display:block;margin:5px 0}
-#gear{position:fixed;bottom:20px;right:20px;background:#0b2a5b;color:white;width:58px;height:58px;border-radius:50%;display:flex;justify-content:center;align-items:center;font-size:28px;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,0.3);z-index:15}
-.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.65);justify-content:center;align-items:center;z-index:20;padding:15px}
-.modal-content{background:white;color:#111;padding:25px;border-radius:16px;width:650px;max-width:95%;max-height:90vh;overflow:auto}
-.modal-content input,.modal-content select,.modal-content textarea{width:100%;padding:10px;margin:6px 0;border-radius:8px;border:1px solid #ccc}
-.modal-content button{background:#0b5fff;color:white;border:none;padding:10px 18px;border-radius:20px;cursor:pointer;margin-top:8px}
-table{width:100%;border-collapse:collapse;margin-top:10px}
-table,th,td{border:1px solid #ddd;padding:8px;font-size:13px}
+.card p.desc{font-size:13px;color:#444;min-height:36px}
+.precio{color:#0b5fff;font-size:22px;font-weight:900;margin:8px 0}
+.unidades{font-size:13px;color:#333;background:#eef2ff;display:inline-block;padding:5px 12px;border-radius:20px}
+.btn-carrito{background:#0b5fff;color:#fff;border:none;width:100%;padding:12px;border-radius:20px;font-weight:800;margin-top:10px;cursor:pointer}
+.vacio{background:#fff;border-radius:16px;padding:40px;text-align:center;color:#666;grid-column:1/-1}
+.beneficios{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;background:#fff;margin:24px 0;padding:24px;border-radius:16px;text-align:center}
+footer{background:#0b2a5b;color:#fff;padding:36px 24px;margin-top:30px}
+.footer-grid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr;gap:24px}
+footer a{color:#9ecbff;text-decoration:none;display:block;margin:6px 0}
+#gear{position:fixed;bottom:20px;right:20px;background:#0b2a5b;color:#fff;width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,0.3);z-index:15}
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.65);justify-content:center;align-items:center;z-index:20;padding:16px}
+.modal-content{background:#fff;color:#111;padding:24px;border-radius:16px;width:900px;max-width:95%;max-height:90vh;overflow:auto}
+.modal-content h2{color:#0b2a5b;margin-bottom:12px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.modal-content input,.modal-content select,.modal-content textarea{width:100%;padding:11px;margin:6px 0;border-radius:8px;border:1px solid #ccc;font-size:14px}
+.modal-content button{background:#0b5fff;color:#fff;border:none;padding:11px 20px;border-radius:20px;cursor:pointer;font-weight:700;margin-top:8px}
+.preview-box{background:#f4f6fb;border:2px dashed #0b5fff;border-radius:16px;padding:14px;position:sticky;top:0}
+.preview-box h4{margin-bottom:10px;color:#0b5fff}
+table{width:100%;border-collapse:collapse;margin-top:12px}
+th,td{border:1px solid #ddd;padding:8px;font-size:13px;text-align:left}
+.borrar{background:#dc3545 !important;padding:6px 12px !important;border-radius:12px !important}
 
 @media(max-width:1000px){
+.form-grid{grid-template-columns:1fr}
 .cats{grid-template-columns:repeat(4,1fr)}
 .productos{grid-template-columns:repeat(2,1fr)}
 .beneficios{grid-template-columns:repeat(2,1fr)}
-footer{grid-template-columns:1fr}
+.footer-grid{grid-template-columns:1fr}
 @media(max-width:600px){
-nav{display:none;width:100%;flex-direction:column;background:#f4f6fb;padding:10px;border-radius:10px;margin-top:10px}
-nav.active{display:flex}
 .menu-btn{display:block}
+nav{display:none;width:100%;flex-direction:column;background:#f4f6fb;padding:10px;border-radius:12px;margin-top:10px}
+nav.active{display:flex}
 .cats{grid-template-columns:1fr 1fr}
 .productos{grid-template-columns:1fr}
 .banner h1{font-size:26px}
@@ -75,181 +91,254 @@ header{flex-direction:column;align-items:flex-start}
     </div>
     <button class="menu-btn" onclick="document.querySelector('nav').classList.toggle('active')">☰</button>
   </div>
-  <nav>
-    <a href="#">Inicio</a>
-    <a href="#categorias">Categorías</a>
-    <a href="#ofertas">Ofertas</a>
-    <a href="#">Vender</a>
-    <a href="#">Ayuda</a>
+  <nav id="menu">
+    <button onclick="filtrar('Todos')" class="active">Todos</button>
+    <button onclick="filtrar('Tecnología')">Tecnología</button>
+    <button onclick="filtrar('Alimentos')">Alimentos</button>
+    <button onclick="filtrar('Bebidas')">Bebidas</button>
+    <button onclick="filtrar('Hogar')">Hogar</button>
+    <button onclick="filtrar('Deportes')">Deportes</button>
+    <button onclick="filtrar('Belleza')">Belleza</button>
+    <button onclick="filtrar('Mascotas')">Mascotas</button>
+    <button onclick="filtrar('Ofertas')">Ofertas</button>
   </nav>
   <div class="header-actions">
-    <span>🔍</span><span>👤</span><span>🛒 3</span>
+    <span style="font-size:20px">🛒</span>
     <button class="btn-login">Iniciar sesión</button>
   </div>
 </header>
 
 <div class="banner">
-  <div>
-    <h1>Todo lo que necesitas en<br>Tres Arroyos</h1>
-    <p>Tecnología • Alimentos • Bebidas • Hogar • Deportes • Belleza • Mascotas, todo en un solo lugar, compra rápido y seguro desde tu ciudad</p>
-    <button class="btn-explorar">Explorar productos</button>
-    <button class="btn-vender">Cómo vender</button>
-  </div>
+  <h1>Todo lo que necesitas en Tres Arroyos</h1>
+  <p>Tecnología, Alimentos, Bebidas, Hogar, Deportes, Belleza y Mascotas. Venta exclusiva de MARKET3A. Compra rápido y seguro desde tu ciudad.</p>
+  <button class="btn-explorar" onclick="document.getElementById('productos').scrollIntoView()">Explorar productos</button>
 </div>
 
-<h2 class="titulo" id="categorias">Categorías</h2>
-<p class="sub">Explora por categoría y encuentra lo que buscas</p>
-<div class="cats">
-  <div class="cat"><div class="cat-icon">💻</div><b>Tecnología</b></div>
-  <div class="cat"><div class="cat-icon">🍎</div><b>Alimentos</b></div>
-  <div class="cat"><div class="cat-icon">🥤</div><b>Bebidas</b></div>
-  <div class="cat"><div class="cat-icon">🏠</div><b>Hogar</b></div>
-  <div class="cat"><div class="cat-icon">💪</div><b>Deportes</b></div>
-  <div class="cat"><div class="cat-icon">⚽</div><b>Fútbol</b></div>
-  <div class="cat"><div class="cat-icon">💄</div><b>Belleza</b></div>
-  <div class="cat"><div class="cat-icon">🐾</div><b>Mascotas</b></div>
+<div class="search-bar">
+  <input id="buscador" placeholder="Buscar productos en MARKET3A..." onkeyup="renderGrid()">
 </div>
 
-<h2 class="titulo">Productos destacados</h2>
-<p class="sub">Los más elegidos por la comunidad de Tres Arroyos</p>
-<div class="productos">
+<div class="contenedor">
+  <h2 class="titulo" id="categorias">Categorías</h2>
+  <p class="sub">Tocá una categoría para filtrar</p>
+  <div class="cats" id="cats"></div>
 
-  <div class="card">
-    <img class="main" src="https://via.placeholder.com/400x300?text=Auriculares+BT" id="m1">
-    <div class="thumbs">
-      <img src="https://via.placeholder.com/400x300?text=Auriculares+BT" onclick="document.getElementById('m1').src=this.src">
-      <img src="https://via.placeholder.com/400x300?text=Foto+2" onclick="document.getElementById('m1').src=this.src">
-      <img src="https://via.placeholder.com/400x300?text=Foto+3" onclick="document.getElementById('m1').src=this.src">
-    </div>
-    <span class="tag">Tecnología</span>
-    <h3>Auriculares Bluetooth Inalámbricos</h3>
-    <p>Sonido HD, 24h batería, micrófono integrado</p>
-    <div class="precio">$29.990</div>
-    <div class="unidades">📦 12 unidades disponibles</div>
-    <button class="btn-carrito">Agregar al carrito</button>
+  <h2 class="titulo" id="productos">Productos</h2>
+  <p class="sub" id="contador"></p>
+  <div class="productos" id="grid"></div>
+
+  <div class="beneficios">
+    <div><div style="font-size:30px">🚚</div><b>Envío local</b><p>Tres Arroyos y zona, en el día</p></div>
+    <div><div style="font-size:30px">🛡️</div><b>Compra protegida</b><p>Si no llega, te devolvemos</p></div>
+    <div><div style="font-size:30px">💳</div><b>Pagos locales</b><p>Tarjeta, transferencia, efectivo</p></div>
+    <div><div style="font-size:30px">📞</div><b>Soporte local</b><p>Te atendemos por WhatsApp</p></div>
   </div>
-
-  <div class="card">
-    <img class="main" src="https://via.placeholder.com/400x300?text=Aceite+Oliva" id="m2">
-    <div class="thumbs">
-      <img src="https://via.placeholder.com/400x300?text=Aceite+Oliva" onclick="document.getElementById('m2').src=this.src">
-      <img src="https://via.placeholder.com/400x300?text=Foto+2" onclick="document.getElementById('m2').src=this.src">
-    </div>
-    <span class="tag">Alimentos</span>
-    <h3>Aceite de Oliva Extra Virgen 500ml</h3>
-    <p>Prensado en frío, origen local Tres Arroyos</p>
-    <div class="precio">$4.250</div>
-    <div class="unidades">📦 30 unidades disponibles</div>
-    <button class="btn-carrito">Agregar al carrito</button>
-  </div>
-
-  <div class="card" id="ofertas">
-    <img class="main" src="https://via.placeholder.com/400x300?text=Agua+Mineral" id="m3">
-    <div class="thumbs">
-      <img src="https://via.placeholder.com/400x300?text=Agua+Mineral" onclick="document.getElementById('m3').src=this.src">
-      <img src="https://via.placeholder.com/400x300?text=Foto+2" onclick="document.getElementById('m3').src=this.src">
-    </div>
-    <span class="tag">Bebidas</span>
-    <h3>Agua Mineral Pack x6 500ml</h3>
-    <p>Agua natural sin gas, pack 6 unidades</p>
-    <div class="precio">$2.100</div>
-    <div class="unidades">📦 50 unidades disponibles</div>
-    <button class="btn-carrito">Agregar al carrito</button>
-  </div>
-
-  <div class="card">
-    <img class="main" src="https://via.placeholder.com/400x300?text=Sartenes" id="m4">
-    <div class="thumbs">
-      <img src="https://via.placeholder.com/400x300?text=Sartenes" onclick="document.getElementById('m4').src=this.src">
-      <img src="https://via.placeholder.com/400x300?text=Foto+2" onclick="document.getElementById('m4').src=this.src">
-    </div>
-    <span class="tag">Hogar</span>
-    <h3>Set de Sartenes Antiadherentes x3</h3>
-    <p>Inducción, mango ergonómico, 20/24/28cm</p>
-    <div class="precio">$22.500</div>
-    <div class="unidades">📦 8 unidades disponibles</div>
-    <button class="btn-carrito">Agregar al carrito</button>
-  </div>
-
-</div>
-
-<div class="beneficios">
-  <div><div style="font-size:30px">🚚</div><b>Envío local</b><p>Tres Arroyos y zona, en el día</p></div>
-  <div><div style="font-size:30px">🛡️</div><b>Compra protegida</b><p>Si no llega, te devolvemos</p></div>
-  <div><div style="font-size:30px">💳</div><b>Pagos locales</b><p>Tarjeta, transferencia, efectivo</p></div>
-  <div><div style="font-size:30px">📞</div><b>Soporte local</b><p>Te atendemos por WhatsApp</p></div>
 </div>
 
 <footer>
-  <div>
-    <h2 style="font-size:32px;margin:0">MARKET3A</h2>
-    <p>El marketplace de Tres Arroyos. Compra y vende local, fácil y seguro.</p>
-    <p>© 2026 MARKET3A - Todos los derechos reservados</p>
-  </div>
-  <div>
-    <h3>Soporte</h3>
-    <a href="#">Ayuda</a><a href="#">Envíos</a><a href="#">Contacto</a><a href="#">Términos y condiciones</a>
-  </div>
-  <div>
-    <h3>Contacto</h3>
-    <p>📍 Tres Arroyos, Buenos Aires</p>
-    <p>📞 +54 2983 123456</p>
-    <p>✉️ hola@market3a.com.ar</p>
+  <div class="footer-grid">
+    <div>
+      <h2 style="font-size:32px">MARKET3A</h2>
+      <p>El marketplace de Tres Arroyos. Compra fácil y seguro. Venta exclusiva de MARKET3A.</p>
+      <p>© 2026 MARKET3A - Todos los derechos reservados</p>
+    </div>
+    <div>
+      <h3>Soporte</h3>
+      <a href="#">Ayuda</a>
+      <a href="#">Envíos</a>
+      <a href="#">Contacto</a>
+      <a href="#">Términos y condiciones</a>
+    </div>
+    <div>
+      <h3>Contacto</h3>
+      <p>📍 Tres Arroyos, Buenos Aires</p>
+      <p>📞 +54 2983 123456</p>
+      <p>✉️ hola@market3a.com.ar</p>
+    </div>
   </div>
 </footer>
 
 <div id="gear" onclick="abrir()">⚙️</div>
 <div class="modal" id="modal">
   <div class="modal-content">
-    <h2>Panel Admin MARKET3A</h2>
+    <h2>Panel Admin MARKET3A - Subir con vista previa</h2>
     <div id="loginDiv">
       <input id="pass" type="password" placeholder="Contraseña">
       <button onclick="entrar()">Entrar</button>
-      <p id="err" style="color:red"></p>
+      <p id="err" style="color:red;margin-top:8px"></p>
     </div>
     <div id="panelDiv" style="display:none">
-      <h3>Agregar Producto</h3>
-      <input id="n" placeholder="Nombre del producto">
-      <input id="pr" type="number" placeholder="Precio de venta (ej 2700)">
-      <textarea id="d" placeholder="Descripción"></textarea>
-      <input id="u" type="number" placeholder="Unidades disponibles">
-      <select id="c">
-        <option>Tecnología</option><option>Alimentos</option><option>Bebidas</option>
-        <option>Hogar</option><option>Deportes</option><option>Belleza</option>
-        <option>Mascotas</option><option>Ofertas de la semana</option>
-      </select>
-      <input id="f" placeholder="URL Foto principal">
-      <input id="f2" placeholder="URL Foto 2 para carrusel">
-      <input id="f3" placeholder="URL Foto 3 para carrusel">
-      <button onclick="guardar()">Guardar Producto</button>
-      <h3>Productos</h3>
-      <table><tr><th>Nombre</th><th>Precio</th><th>Cat</th><th>Stock</th><th></th></tr><tbody id="tab"></tbody></table>
-      <button onclick="cerrar()" style="background:#888">Cerrar</button>
+      <div class="form-grid">
+        <div>
+          <h3>Datos del producto</h3>
+          <input id="n" placeholder="Nombre del producto" oninput="actualizarVistaPrevia()">
+          <input id="pr" type="number" placeholder="Precio de venta (ej 2700)" oninput="actualizarVistaPrevia()">
+          <textarea id="d" placeholder="Descripción completa del producto" oninput="actualizarVistaPrevia()"></textarea>
+          <input id="u" type="number" placeholder="Unidades disponibles" oninput="actualizarVistaPrevia()">
+          <select id="c" onchange="actualizarVistaPrevia()">
+            <option>Tecnología</option>
+            <option>Alimentos</option>
+            <option>Bebidas</option>
+            <option>Hogar</option>
+            <option>Deportes</option>
+            <option>Belleza</option>
+            <option>Mascotas</option>
+            <option>Ofertas</option>
+          </select>
+          <input id="f" placeholder="URL Foto principal" oninput="actualizarVistaPrevia()">
+          <input id="f2" placeholder="URL Foto 2 para carrusel (opcional)" oninput="actualizarVistaPrevia()">
+          <input id="f3" placeholder="URL Foto 3 para carrusel (opcional)" oninput="actualizarVistaPrevia()">
+          <button onclick="guardar()">Guardar Producto</button>
+        </div>
+        <div class="preview-box">
+          <h4>VISTA PREVIA - Así se va a ver</h4>
+          <div class="card" id="vistaPrevia" style="margin:0">
+            <img class="main" id="vp-img" src="https://via.placeholder.com/400x300?text=MARKET3A">
+            <div class="thumbs" id="vp-thumbs"></div>
+            <span class="tag" id="vp-cat">Tecnología</span>
+            <h3 id="vp-nombre">Nombre del producto</h3>
+            <p class="desc" id="vp-desc">Descripción del producto</p>
+            <div class="precio" id="vp-precio">$0</div>
+            <div class="unidades" id="vp-unidades">📦 0 unidades disponibles</div>
+            <button class="btn-carrito">Agregar al carrito</button>
+          </div>
+        </div>
+      </div>
+      <h3 style="margin-top:20px">Tus productos subidos</h3>
+      <table>
+        <tr><th>Nombre</th><th>Precio</th><th>Cat</th><th>Stock</th><th></th></tr>
+        <tbody id="tab"></tbody>
+      </table>
+      <button onclick="cerrar()" style="background:#888;margin-top:14px">Cerrar panel</button>
     </div>
   </div>
 </div>
 
 <script>
-function abrir(){document.getElementById('modal').style.display='flex'}
+let filtroActual="Todos";
+let categorias=[
+  {nombre:"Tecnología",icon:"💻"},
+  {nombre:"Alimentos",icon:"🍎"},
+  {nombre:"Bebidas",icon:"🥤"},
+  {nombre:"Hogar",icon:"🏠"},
+  {nombre:"Deportes",icon:"💪"},
+  {nombre:"Belleza",icon:"💄"},
+  {nombre:"Mascotas",icon:"🐾"},
+  {nombre:"Ofertas",icon:"🏷️"}
+];
+
+function getProductos(){
+  return JSON.parse(localStorage.getItem('market3a')||'[]');
+}
+
+function renderCats(){
+  let html=`<div class="cat ${filtroActual==='Todos'?'active':''}" onclick="filtrar('Todos')"><div class="cat-icon">🛒</div><b>Todos</b></div>`;
+  html+=categorias.map(cat=>`<div class="cat ${filtroActual===cat.nombre?'active':''}" onclick="filtrar('${cat.nombre}')"><div class="cat-icon">${cat.icon}</div><b>${cat.nombre}</b></div>`).join('');
+  document.getElementById('cats').innerHTML=html;
+  document.querySelectorAll('#menu button').forEach(b=>{
+    if(b.innerText===filtroActual || (filtroActual==='Todos' && b.innerText==='Todos')) b.classList.add('active'); else b.classList.remove('active');
+  });
+}
+
+function cambiarFoto(id, src){
+  document.getElementById(id).src=src;
+}
+
+function renderGrid(){
+  let todos=getProductos();
+  let filtrados = filtroActual==='Todos' ? todos : todos.filter(p=>p.c===filtroActual);
+  let texto=document.getElementById('buscador').value.toLowerCase();
+  if(texto){filtrados=filtrados.filter(p=>p.n.toLowerCase().includes(texto) || (p.d && p.d.toLowerCase().includes(texto)));}
+  document.getElementById('contador').innerText=filtrados.length+" productos encontrados"+(filtroActual!=='Todos' ? " en "+filtroActual : "");
+  if(filtrados.length===0){
+    document.getElementById('grid').innerHTML=`<div class="vacio"><h3>No hay productos todavía</h3><p>Entrá al panel con el engranaje y contraseña Santifina y subí tu primer producto. Aparecerá acá al instante.</p></div>`;
+  }else{
+    document.getElementById('grid').innerHTML=filtrados.map((p,i)=>{
+      let f2=p.f2||p.f;
+      let f3=p.f3||p.f;
+      return `<div class="card">
+        <img class="main" src="${p.f}" id="prod-${i}">
+        <div class="thumbs">
+          <img src="${p.f}" onclick="cambiarFoto('prod-${i}','${p.f}')">
+          <img src="${f2}" onclick="cambiarFoto('prod-${i}','${f2}')">
+          <img src="${f3}" onclick="cambiarFoto('prod-${i}','${f3}')">
+        </div>
+        <span class="tag">${p.c}</span>
+        <h3>${p.n}</h3>
+        <p class="desc">${p.d||''}</p>
+        <div class="precio">$${p.pr}</div>
+        <div class="unidades">📦 ${p.u} unidades disponibles</div>
+        <button class="btn-carrito">Agregar al carrito</button>
+      </div>`;
+    }).join('');
+  }
+  renderCats();
+}
+
+function actualizarVistaPrevia(){
+  let n=document.getElementById('n').value || "Nombre del producto";
+  let pr=document.getElementById('pr').value || "0";
+  let d=document.getElementById('d').value || "Descripción del producto";
+  let u=document.getElementById('u').value || "0";
+  let c=document.getElementById('c').value;
+  let f=document.getElementById('f').value || "https://via.placeholder.com/400x300?text=MARKET3A";
+  let f2=document.getElementById('f2').value || f;
+  let f3=document.getElementById('f3').value || f;
+  document.getElementById('vp-img').src=f;
+  document.getElementById('vp-nombre').innerText=n;
+  document.getElementById('vp-desc').innerText=d;
+  document.getElementById('vp-precio').innerText="$"+pr;
+  document.getElementById('vp-unidades').innerText="📦 "+u+" unidades disponibles";
+  document.getElementById('vp-cat').innerText=c;
+  document.getElementById('vp-thumbs').innerHTML=`<img src="${f}" onclick="document.getElementById('vp-img').src='${f}'"><img src="${f2}" onclick="document.getElementById('vp-img').src='${f2}'"><img src="${f3}" onclick="document.getElementById('vp-img').src='${f3}'">`;
+}
+
+function filtrar(cat){
+  filtroActual=cat;
+  document.querySelector('nav').classList.remove('active');
+  renderGrid();
+  document.getElementById('productos').scrollIntoView();
+}
+
+function abrir(){document.getElementById('modal').style.display='flex'; actualizarVistaPrevia();}
 function cerrar(){document.getElementById('modal').style.display='none'}
 function entrar(){
   if(document.getElementById('pass').value==="Santifina"){
     document.getElementById('loginDiv').style.display='none';
     document.getElementById('panelDiv').style.display='block';
-    listar();
+    listarAdmin();
+    actualizarVistaPrevia();
   } else {document.getElementById('err').innerText='Contraseña incorrecta'}
 }
 function guardar(){
-  let p={n:document.getElementById('n').value,pr:document.getElementById('pr').value,d:document.getElementById('d').value,u:document.getElementById('u').value,c:document.getElementById('c').value,f:document.getElementById('f').value};
-  let t=JSON.parse(localStorage.getItem('market3a')||'[]');
-  t.push(p); localStorage.setItem('market3a',JSON.stringify(t));
-  listar(); alert('Producto guardado en MARKET3A');
+  let n=document.getElementById('n').value;
+  let pr=document.getElementById('pr').value;
+  if(!n || !pr){alert('Completá nombre y precio');return;}
+  let p={n:n,pr:pr,d:document.getElementById('d').value,u:document.getElementById('u').value,c:document.getElementById('c').value,f:document.getElementById('f').value,f2:document.getElementById('f2').value,f3:document.getElementById('f3').value};
+  if(!p.f) p.f="https://via.placeholder.com/400x300?text=MARKET3A";
+  let t=getProductos();
+  t.push(p);
+  localStorage.setItem('market3a',JSON.stringify(t));
+  document.getElementById('n').value='';document.getElementById('pr').value='';document.getElementById('d').value='';document.getElementById('u').value='';document.getElementById('f').value='';document.getElementById('f2').value='';document.getElementById('f3').value='';
+  listarAdmin();
+  renderGrid();
+  actualizarVistaPrevia();
+  alert('Producto guardado y visible en MARKET3A');
 }
-function listar(){
-  let t=JSON.parse(localStorage.getItem('market3a')||'[]');
-  document.getElementById('tab').innerHTML=t.map((x,i)=>`<tr><td>${x.n}</td><td>$${x.pr}</td><td>${x.c}</td><td>${x.u}</td><td><button onclick="borrar(${i})">Borrar</button></td></tr>`).join('');
+function listarAdmin(){
+  let t=getProductos();
+  document.getElementById('tab').innerHTML=t.map((x,i)=>`<tr><td>${x.n}</td><td>$${x.pr}</td><td>${x.c}</td><td>${x.u}</td><td><button class="borrar" onclick="borrar(${i})">Borrar</button></td></tr>`).join('') || `<tr><td colspan="5">Todavía no subiste productos</td></tr>`;
 }
-function borrar(i){let t=JSON.parse(localStorage.getItem('market3a')||'[]');t.splice(i,1);localStorage.setItem('market3a',JSON.stringify(t));listar();}
+function borrar(i){
+  let t=getProductos();
+  t.splice(i,1);
+  localStorage.setItem('market3a',JSON.stringify(t));
+  listarAdmin();
+  renderGrid();
+}
+
+renderGrid();
+actualizarVistaPrevia();
 </script>
 </body>
 </html>
