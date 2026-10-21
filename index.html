@@ -1,377 +1,737 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MARKET3A - Marketplace de Tres Arroyos</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,Helvetica,sans-serif}
-body{background:#f4f6fb;color:#111}
-header{background:#fff;padding:14px 24px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10;box-shadow:0 2px 10px rgba(0,0,0,0.1);flex-wrap:wrap;gap:10px}
-.logo{display:flex;align-items:center;gap:12px}
-.logo-icon{width:48px;height:48px;background:#0b5fff;color:#fff;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:28px}
-.logo-text{font-size:28px;font-weight:900;color:#0b2a5b;line-height:1}
-.logo-text small{display:block;font-size:13px;font-weight:400;color:#666}
-nav{display:flex;gap:6px;flex-wrap:wrap}
-nav button{background:none;border:none;color:#0b2a5b;font-weight:700;font-size:14px;cursor:pointer;padding:8px 10px;border-radius:8px}
-nav button:hover, nav button.active{background:#0b5fff;color:#fff}
-.header-actions{display:flex;align-items:center;gap:12px;font-size:20px}
-.menu-btn{display:none;background:#0b5fff;color:#fff;border:none;padding:8px 14px;border-radius:8px;font-size:20px;cursor:pointer}
-.banner{background:linear-gradient(90deg,#0b3d91,#0b5fff);color:#fff;padding:50px 24px}
-.banner h1{font-size:40px;margin-bottom:12px}
-.banner p{font-size:16px;max-width:620px;margin-bottom:18px}
-.btn-explorar{background:#fff;color:#0b5fff;border:none;padding:13px 26px;border-radius:25px;font-weight:800;cursor:pointer}
-.search-bar{padding:18px 24px;background:#fff}
-.search-bar input{width:100%;padding:14px 18px;border-radius:30px;border:1px solid #ddd;font-size:16px}
-.contenedor{max-width:1200px;margin:0 auto;padding:0 16px}
-h2.titulo{font-size:28px;margin:34px 0 6px 0;color:#0b2a5b}
-p.sub{color:#555;margin-bottom:16px}
-.cats{display:grid;grid-template-columns:repeat(8,1fr);gap:12px}
-.cat{background:#fff;padding:16px 10px;border-radius:14px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.07);cursor:pointer;border:2px solid transparent}
-.cat:hover{border-color:#0b5fff}
-.cat.active{border-color:#0b5fff;background:#eef4ff}
-.cat-icon{width:52px;height:52px;background:#0b5fff;color:#fff;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 8px auto}
-.cat b{font-size:13px;color:#0b2a5b}
-.productos{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;padding-bottom:20px}
-.card{background:#fff;border-radius:16px;padding:14px;box-shadow:0 4px 14px rgba(0,0,0,0.08)}
-.card img.main{width:100%;height:200px;object-fit:cover;border-radius:12px}
-.thumbs{display:flex;gap:6px;margin:8px 0}
-.thumbs img{width:50px;height:50px;border-radius:8px;cursor:pointer;object-fit:cover;border:2px solid transparent}
-.tag{background:#e8eefc;color:#0b5fff;font-size:11px;font-weight:800;padding:4px 8px;border-radius:6px;text-transform:uppercase}
-.card h3{margin:8px 0 4px 0;font-size:16px}
-.card p.desc{font-size:13px;color:#444;min-height:36px}
-.precio{color:#0b5fff;font-size:22px;font-weight:900;margin:8px 0}
-.unidades{font-size:13px;color:#333;background:#eef2ff;display:inline-block;padding:5px 12px;border-radius:20px}
-.btn-carrito{background:#0b5fff;color:#fff;border:none;width:100%;padding:12px;border-radius:20px;font-weight:800;margin-top:10px;cursor:pointer}
-.vacio{background:#fff;border-radius:16px;padding:40px;text-align:center;color:#666;grid-column:1/-1}
-.beneficios{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;background:#fff;margin:24px 0;padding:24px;border-radius:16px;text-align:center}
-footer{background:#0b2a5b;color:#fff;padding:36px 24px;margin-top:30px}
-.footer-grid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr;gap:24px}
-footer a{color:#9ecbff;text-decoration:none;display:block;margin:6px 0}
-#gear{position:fixed;bottom:20px;right:20px;background:#0b2a5b;color:#fff;width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,0.3);z-index:15}
-.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.65);justify-content:center;align-items:center;z-index:20;padding:16px}
-.modal-content{background:#fff;color:#111;padding:24px;border-radius:16px;width:900px;max-width:95%;max-height:90vh;overflow:auto}
-.modal-content h2{color:#0b2a5b;margin-bottom:12px}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-.modal-content input,.modal-content select,.modal-content textarea{width:100%;padding:11px;margin:6px 0;border-radius:8px;border:1px solid #ccc;font-size:14px}
-.modal-content input[type=file]{background:#f4f6fb;padding:10px}
-.modal-content button{background:#0b5fff;color:#fff;border:none;padding:11px 20px;border-radius:20px;cursor:pointer;font-weight:700;margin-top:8px}
-.preview-box{background:#f4f6fb;border:2px dashed #0b5fff;border-radius:16px;padding:14px;position:sticky;top:0}
-.preview-box h4{margin-bottom:10px;color:#0b5fff}
-.file-preview{display:flex;gap:8px;margin:8px 0}
-.file-preview img{width:70px;height:70px;object-fit:cover;border-radius:8px;border:2px solid #0b5fff}
-table{width:100%;border-collapse:collapse;margin-top:12px}
-th,td{border:1px solid #ddd;padding:8px;font-size:13px;text-align:left}
-.borrar{background:#dc3545 !important;padding:6px 12px !important;border-radius:12px !important}
-
-@media(max-width:1000px){
-.form-grid{grid-template-columns:1fr}
-.cats{grid-template-columns:repeat(4,1fr)}
-.productos{grid-template-columns:repeat(2,1fr)}
-.beneficios{grid-template-columns:repeat(2,1fr)}
-.footer-grid{grid-template-columns:1fr}
-@media(max-width:600px){
-.menu-btn{display:block}
-nav{display:none;width:100%;flex-direction:column;background:#f4f6fb;padding:10px;border-radius:12px;margin-top:10px}
-nav.active{display:flex}
-.cats{grid-template-columns:1fr 1fr}
-.productos{grid-template-columns:1fr}
-.banner h1{font-size:26px}
-.beneficios{grid-template-columns:1fr}
-header{flex-direction:column;align-items:flex-start}
-.logo-text{font-size:24px}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tresa web - Portafolio & Galería de Proyectos</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            900: '#312e81',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #1f2937;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #4b5563;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #6b7280;
+        }
+    </style>
 </head>
-<body>
+<body class="bg-gray-950 text-gray-100 font-sans min-h-screen flex flex-col antialiased selection:bg-indigo-500 selection:text-white">
 
-<header>
-  <div style="display:flex;justify-content:space-between;width:100%;align-items:center">
-    <div class="logo">
-      <div class="logo-icon">🛒</div>
-      <div class="logo-text">MARKET3A<small>Marketplace de Tres Arroyos</small></div>
-    </div>
-    <button class="menu-btn" onclick="document.querySelector('nav').classList.toggle('active')">☰</button>
-  </div>
-  <nav id="menu">
-    <button onclick="filtrar('Todos')" class="active">Todos</button>
-    <button onclick="filtrar('Tecnología')">Tecnología</button>
-    <button onclick="filtrar('Alimentos')">Alimentos</button>
-    <button onclick="filtrar('Bebidas')">Bebidas</button>
-    <button onclick="filtrar('Hogar')">Hogar</button>
-    <button onclick="filtrar('Deportes')">Deportes</button>
-    <button onclick="filtrar('Belleza')">Belleza</button>
-    <button onclick="filtrar('Mascotas')">Mascotas</button>
-    <button onclick="filtrar('Ofertas')">Ofertas</button>
-  </nav>
-  <div class="header-actions">
-    <span>🛒</span>
-  </div>
-</header>
+    <!-- HEADER / NAVBAR -->
+    <header class="sticky top-0 z-40 bg-gray-900/90 backdrop-blur-md border-b border-gray-800 shadow-xl">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            
+            <!-- BRAND LOGO -->
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="switchCategory('all')">
+                <div class="w-11 h-11 bg-gradient-to-tr from-indigo-600 via-purple-600 to-pink-500 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20">
+                    <i data-lucide="globe" class="w-6 h-6 text-white"></i>
+                </div>
+                <div>
+                    <h1 id="site-title-display" class="text-2xl font-black tracking-tight text-white flex items-center gap-2">
+                        tresa web
+                        <span class="text-xs bg-indigo-500/20 text-indigo-400 font-mono font-semibold px-2 py-0.5 rounded border border-indigo-500/30">v2.5</span>
+                    </h1>
+                    <p id="site-desc-display" class="text-xs text-gray-400">Desarrollo Web & Soluciones Digitales</p>
+                </div>
+            </div>
 
-<div class="banner">
-  <h1>Todo lo que necesitas en Tres Arroyos</h1>
-  <p>Tecnología, Alimentos, Bebidas, Hogar, Deportes, Belleza y Mascotas. Venta exclusiva de MARKET3A. Compra rápido y seguro desde tu ciudad.</p>
-  <button class="btn-explorar" onclick="document.getElementById('productos').scrollIntoView()">Explorar productos</button>
-</div>
+            <!-- ACTIONS & NAV -->
+            <div class="flex items-center space-x-3">
+                <button onclick="switchCategory('editor')" class="px-4 py-2 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-bold rounded-xl shadow-lg shadow-orange-500/20 transition-all transform hover:-translate-y-0.5 flex items-center gap-2 text-sm">
+                    <i data-lucide="edit-3" class="w-4 h-4"></i>
+                    <span>EDITA TU PÁGINA</span>
+                </button>
 
-<div class="search-bar">
-  <input id="buscador" placeholder="Buscar productos en MARKET3A..." onkeyup="renderGrid()">
-</div>
-
-<div class="contenedor">
-  <h2 class="titulo" id="categorias">Categorías</h2>
-  <p class="sub">Tocá una categoría para filtrar</p>
-  <div class="cats" id="cats"></div>
-
-  <h2 class="titulo" id="productos">Productos</h2>
-  <p class="sub" id="contador"></p>
-  <div class="productos" id="grid"></div>
-
-  <div class="beneficios">
-    <div><div style="font-size:30px">🚚</div><b>Envío local</b><p>Tres Arroyos y zona, en el día</p></div>
-    <div><div style="font-size:30px">🛡️</div><b>Compra protegida</b><p>Si no llega, te devolvemos</p></div>
-    <div><div style="font-size:30px">💳</div><b>Pagos locales</b><p>Tarjeta, transferencia, efectivo</p></div>
-    <div><div style="font-size:30px">📞</div><b>Soporte local</b><p>Te atendemos por WhatsApp</p></div>
-  </div>
-</div>
-
-<footer>
-  <div class="footer-grid">
-    <div>
-      <h2 style="font-size:32px">MARKET3A</h2>
-      <p>El marketplace de Tres Arroyos. Compra fácil y seguro. Venta exclusiva de MARKET3A.</p>
-      <p>© 2026 MARKET3A - Todos los derechos reservados</p>
-    </div>
-    <div>
-      <h3>Soporte</h3>
-      <a href="#">Ayuda</a>
-      <a href="#">Envíos</a>
-      <a href="#">Contacto</a>
-      <a href="#">Términos y condiciones</a>
-    </div>
-    <div>
-      <h3>Contacto</h3>
-      <p>📍 Tres Arroyos, Buenos Aires</p>
-      <p>📞 +54 2983 123456</p>
-      <p>✉️ hola@market3a.com.ar</p>
-    </div>
-  </div>
-</footer>
-
-<div id="gear" onclick="abrir()">⚙️</div>
-<div class="modal" id="modal">
-  <div class="modal-content">
-    <h2>Panel Admin MARKET3A - Subir por archivo</h2>
-    <div id="loginDiv">
-      <input id="pass" type="password" placeholder="Contraseña">
-      <button onclick="entrar()">Entrar</button>
-      <p id="err" style="color:red;margin-top:8px"></p>
-    </div>
-    <div id="panelDiv" style="display:none">
-      <div class="form-grid">
-        <div>
-          <h3>Datos del producto</h3>
-          <input id="n" placeholder="Nombre del producto" oninput="actualizarVistaPrevia()">
-          <input id="pr" type="number" placeholder="Precio de venta (ej 2700)" oninput="actualizarVistaPrevia()">
-          <textarea id="d" placeholder="Descripción completa del producto" oninput="actualizarVistaPrevia()"></textarea>
-          <input id="u" type="number" placeholder="Unidades disponibles" oninput="actualizarVistaPrevia()">
-          <select id="c" onchange="actualizarVistaPrevia()">
-            <option>Tecnología</option>
-            <option>Alimentos</option>
-            <option>Bebidas</option>
-            <option>Hogar</option>
-            <option>Deportes</option>
-            <option>Belleza</option>
-            <option>Mascotas</option>
-            <option>Ofertas</option>
-          </select>
-
-          <h4>Foto principal (obligatoria)</h4>
-          <input type="file" id="fFile" accept="image/*" onchange="cargarFoto(this,'f')">
-
-          <h4>Foto 2 para carrusel (opcional)</h4>
-          <input type="file" id="f2File" accept="image/*" onchange="cargarFoto(this,'f2')">
-
-          <h4>Foto 3 para carrusel (opcional)</h4>
-          <input type="file" id="f3File" accept="image/*" onchange="cargarFoto(this,'f3')">
-
-          <div class="file-preview" id="filePreview"></div>
-
-          <button onclick="guardar()">Guardar Producto</button>
+                <!-- ADMIN GEAR BUTTON -->
+                <button onclick="openAdminAuth()" title="Panel de Administración" class="p-3 bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white rounded-xl border border-gray-700 transition-all flex items-center justify-center group">
+                    <i data-lucide="settings" class="w-5 h-5 group-hover:rotate-90 transition-transform duration-300"></i>
+                </button>
+            </div>
         </div>
-        <div class="preview-box">
-          <h4>VISTA PREVIA - Así se va a ver</h4>
-          <div class="card" id="vistaPrevia" style="margin:0">
-            <img class="main" id="vp-img" src="https://via.placeholder.com/400x300?text=MARKET3A">
-            <div class="thumbs" id="vp-thumbs"></div>
-            <span class="tag" id="vp-cat">Tecnología</span>
-            <h3 id="vp-nombre">Nombre del producto</h3>
-            <p class="desc" id="vp-desc">Descripción del producto</p>
-            <div class="precio" id="vp-precio">$0</div>
-            <div class="unidades" id="vp-unidades">📦 0 unidades disponibles</div>
-            <button class="btn-carrito">Agregar al carrito</button>
-          </div>
+    </header>
+
+    <!-- MAIN LAYOUT -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- CATEGORIES FILTER NAVBAR -->
+        <div class="mb-8 flex flex-wrap items-center gap-2 border-b border-gray-800 pb-4 overflow-x-auto custom-scrollbar">
+            <button onclick="switchCategory('all')" id="cat-btn-all" class="cat-btn px-4 py-2 rounded-xl text-sm font-semibold transition-all bg-indigo-600 text-white shadow-lg shadow-indigo-600/30 flex items-center gap-2">
+                <i data-lucide="layout-grid" class="w-4 h-4"></i> Todos
+            </button>
+            <button onclick="switchCategory('gastronomia')" id="cat-btn-gastronomia" class="cat-btn px-4 py-2 rounded-xl text-sm font-semibold transition-all bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white flex items-center gap-2">
+                <i data-lucide="utensils" class="w-4 h-4"></i> 🍕 Gastronomía
+            </button>
+            <button onclick="switchCategory('inmobiliaria')" id="cat-btn-inmobiliaria" class="cat-btn px-4 py-2 rounded-xl text-sm font-semibold transition-all bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white flex items-center gap-2">
+                <i data-lucide="home" class="w-4 h-4"></i> 🏡 Inmobiliarias
+            </button>
+            <button onclick="switchCategory('comercio')" id="cat-btn-comercio" class="cat-btn px-4 py-2 rounded-xl text-sm font-semibold transition-all bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white flex items-center gap-2">
+                <i data-lucide="shopping-bag" class="w-4 h-4"></i> 🛍️ Comercio & Moda
+            </button>
+            <button onclick="switchCategory('servicios')" id="cat-btn-servicios" class="cat-btn px-4 py-2 rounded-xl text-sm font-semibold transition-all bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white flex items-center gap-2">
+                <i data-lucide="sparkles" class="w-4 h-4"></i> 💇 Servicios
+            </button>
+            <button onclick="switchCategory('herramientas')" id="cat-btn-herramientas" class="cat-btn px-4 py-2 rounded-xl text-sm font-semibold transition-all bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white flex items-center gap-2">
+                <i data-lucide="wrench" class="w-4 h-4"></i> 🛠️ Herramientas
+            </button>
+            <button onclick="switchCategory('clasificados')" id="cat-btn-clasificados" class="cat-btn px-4 py-2 rounded-xl text-sm font-semibold transition-all bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white flex items-center gap-2">
+                <i data-lucide="tag" class="w-4 h-4"></i> 🛒 Clasificados
+            </button>
+            <button onclick="switchCategory('editor')" id="cat-btn-editor" class="cat-btn px-4 py-2 rounded-xl text-sm font-bold transition-all bg-amber-500/10 text-amber-400 border border-amber-500/30 hover:bg-amber-500 hover:text-white flex items-center gap-2 ml-auto">
+                <i data-lucide="edit-3" class="w-4 h-4"></i> EDITA TU PÁGINA
+            </button>
         </div>
-      </div>
-      <h3 style="margin-top:20px">Tus productos subidos</h3>
-      <table>
-        <tr><th>Nombre</th><th>Precio</th><th>Cat</th><th>Stock</th><th></th></tr>
-        <tbody id="tab"></tbody>
-      </table>
-      <button onclick="cerrar()" style="background:#888;margin-top:14px">Cerrar panel</button>
+
+        <!-- PORTFOLIO GRID SECTION -->
+        <div id="portfolio-section" class="space-y-6">
+            <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Project cards will be injected dynamically -->
+            </div>
+        </div>
+
+        <!-- SECTION: EDITA TU PÁGINA (LIVE TEMPLATE EDITOR) -->
+        <div id="editor-section" class="hidden space-y-6">
+            <div class="bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-transparent p-6 rounded-2xl border border-amber-500/20 mb-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-2xl font-black text-amber-400 flex items-center gap-2">
+                        <i data-lucide="layout-template" class="w-7 h-7"></i> EDITA TU PÁGINA EN TIEMPO REAL
+                    </h2>
+                    <p class="text-gray-300 text-sm mt-1">Completa los campos a la izquierda y observa cómo cambia tu plantilla al instante en el lado derecho.</p>
+                </div>
+                <button onclick="exportCustomSite()" class="px-5 py-2.5 bg-amber-500 hover:bg-amber-600 text-gray-950 font-bold rounded-xl shadow-lg flex items-center gap-2 text-sm transition-all">
+                    <i data-lucide="download" class="w-4 h-4"></i> Solicitar este Diseño
+                </button>
+            </div>
+
+            <!-- SPLIT SCREEN: CONTROL PANEL (LEFT) & PREVIEW (RIGHT) -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                
+                <!-- CONTROL PANEL FORM (4 COLS) -->
+                <div class="lg:col-span-4 bg-gray-900 border border-gray-800 p-6 rounded-2xl space-y-5 h-fit shadow-xl">
+                    <h3 class="text-lg font-bold text-white border-b border-gray-800 pb-3 flex items-center gap-2">
+                        <i data-lucide="sliders" class="w-5 h-5 text-amber-400"></i> Personalizador
+                    </h3>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-400 uppercase mb-1">Nombre del Negocio / Título</label>
+                        <input type="text" id="tmpl-title" value="Don Ramón Resto & Bar" oninput="updateLivePreview()" class="w-full bg-gray-950 border border-gray-800 rounded-lg px-3 py-2 text-sm text-white focus:border-amber-500 outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-400 uppercase mb-1">Slogan o Subtítulo</label>
+                        <input type="text" id="tmpl-subtitle" value="Sabores auténticos & tragos de autor" oninput="updateLivePreview()" class="w-full bg-gray-950 border border-gray-800 rounded-lg px-3 py-2 text-sm text-white focus:border-amber-500 outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-400 uppercase mb-1">Descripción Breve</label>
+                        <textarea id="tmpl-desc" rows="3" oninput="updateLivePreview()" class="w-full bg-gray-950 border border-gray-800 rounded-lg px-3 py-2 text-sm text-white focus:border-amber-500 outline-none">Ven a disfrutar de los mejores platos gourmet, pizzas a la leña y coctelería en un ambiente único.</textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-400 uppercase mb-1">Color Principal del Tema</label>
+                        <div class="flex items-center gap-3">
+                            <input type="color" id="tmpl-color" value="#f59e0b" oninput="updateLivePreview()" class="w-12 h-10 bg-gray-950 border border-gray-800 rounded cursor-pointer">
+                            <span id="tmpl-color-hex" class="font-mono text-xs text-gray-400">#f59e0b</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-400 uppercase mb-1">Número de WhatsApp (con código de país)</label>
+                        <input type="text" id="tmpl-whatsapp" value="+5492983123456" oninput="updateLivePreview()" class="w-full bg-gray-950 border border-gray-800 rounded-lg px-3 py-2 text-sm text-white focus:border-amber-500 outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-400 uppercase mb-1">Ubicación / Dirección</label>
+                        <input type="text" id="tmpl-location" value="Av. San Martín 450, Tres Arroyos" oninput="updateLivePreview()" class="w-full bg-gray-950 border border-gray-800 rounded-lg px-3 py-2 text-sm text-white focus:border-amber-500 outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-400 uppercase mb-1">Servicios / Productos (separados por coma)</label>
+                        <input type="text" id="tmpl-services" value="Pizzas a la leña, Hamburguesas gourmet, Tragos de autor, Envíos a domicilio" oninput="updateLivePreview()" class="w-full bg-gray-950 border border-gray-800 rounded-lg px-3 py-2 text-sm text-white focus:border-amber-500 outline-none">
+                    </div>
+                </div>
+
+                <!-- LIVE PREVIEW CANVAS (8 COLS) -->
+                <div class="lg:col-span-8 bg-gray-900 border border-gray-800 rounded-2xl p-4 shadow-2xl flex flex-col h-[750px]">
+                    <div class="flex items-center justify-between border-b border-gray-800 pb-3 mb-4">
+                        <span class="text-xs font-bold text-gray-400 uppercase flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse"></span>
+                            Vista Previa en Vivo de tu Sitio Web
+                        </span>
+                        <div class="flex gap-1.5">
+                            <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-500/80"></div>
+                        </div>
+                    </div>
+
+                    <!-- PREVIEW CONTAINER FRAME -->
+                    <div id="live-preview-container" class="flex-grow bg-slate-950 rounded-xl border border-gray-800 overflow-y-auto custom-scrollbar p-6 transition-all">
+                        <!-- Content dynamically rendered via updateLivePreview() -->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <!-- MODAL: ADMIN LOGIN / CONTROL PANEL -->
+    <div id="admin-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-gray-900 border border-gray-800 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-6 relative">
+            
+            <button onclick="closeAdminModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+
+            <!-- AUTH FORM -->
+            <div id="admin-auth-form" class="space-y-4">
+                <div class="text-center space-y-2">
+                    <div class="w-12 h-12 bg-indigo-600/20 border border-indigo-500/30 text-indigo-400 rounded-xl flex items-center justify-center mx-auto">
+                        <i data-lucide="lock" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white">Acceso Administrador</h3>
+                    <p class="text-xs text-gray-400">Ingresa la contraseña para gestionar el portafolio</p>
+                </div>
+                <div>
+                    <input type="password" id="admin-pass-input" placeholder="Contraseña de acceso" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-3 text-center text-lg tracking-widest text-white focus:border-indigo-500 outline-none">
+                </div>
+                <button onclick="verifyAdminPass()" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl transition-all shadow-lg shadow-indigo-600/30">
+                    Ingresar
+                </button>
+            </div>
+
+            <!-- ADMIN DASHBOARD PANEL (HIDDEN BY DEFAULT) -->
+            <div id="admin-dashboard" class="hidden space-y-6">
+                <div class="flex items-center justify-between border-b border-gray-800 pb-3">
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i data-lucide="shield-check" class="w-5 h-5 text-indigo-400"></i> Panel Administrador
+                    </h3>
+                    <button onclick="logoutAdmin()" class="text-xs text-red-400 hover:underline">Cerrar Sesión</button>
+                </div>
+
+                <!-- EDIT SITE METADATA -->
+                <div class="space-y-3 bg-gray-950 p-4 rounded-xl border border-gray-800">
+                    <h4 class="text-xs font-bold text-indigo-400 uppercase tracking-wider">Configuración General del Sitio</h4>
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">Título de la Plataforma</label>
+                        <input type="text" id="edit-site-title" class="w-full bg-gray-900 border border-gray-800 rounded-lg px-3 py-2 text-sm text-white focus:border-indigo-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">Descripción / Subtítulo</label>
+                        <input type="text" id="edit-site-desc" class="w-full bg-gray-900 border border-gray-800 rounded-lg px-3 py-2 text-sm text-white focus:border-indigo-500 outline-none">
+                    </div>
+                    <button onclick="saveSiteMetadata()" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-lg transition-all">
+                        Guardar Encabezado
+                    </button>
+                </div>
+
+                <!-- ADD NEW PROJECT FORM -->
+                <div class="space-y-3 bg-gray-950 p-4 rounded-xl border border-gray-800">
+                    <h4 class="text-xs font-bold text-indigo-400 uppercase tracking-wider">Agregar Nuevo Proyecto</h4>
+                    <input type="text" id="new-proj-title" placeholder="Título del Proyecto" class="w-full bg-gray-900 border border-gray-800 rounded-lg px-3 py-2 text-xs text-white outline-none">
+                    <input type="text" id="new-proj-url" placeholder="URL completa (https://...)" class="w-full bg-gray-900 border border-gray-800 rounded-lg px-3 py-2 text-xs text-white outline-none">
+                    <select id="new-proj-cat" class="w-full bg-gray-900 border border-gray-800 rounded-lg px-3 py-2 text-xs text-white outline-none">
+                        <option value="gastronomia">Gastronomía</option>
+                        <option value="inmobiliaria">Inmobiliarias</option>
+                        <option value="comercio">Comercio & Moda</option>
+                        <option value="servicios">Servicios</option>
+                        <option value="herramientas">Herramientas</option>
+                        <option value="clasificados">Clasificados</option>
+                    </select>
+                    <textarea id="new-proj-desc" placeholder="Descripción breve" rows="2" class="w-full bg-gray-900 border border-gray-800 rounded-lg px-3 py-2 text-xs text-white outline-none"></textarea>
+                    <button onclick="addNewProject()" class="w-full py-2 bg-green-600 hover:bg-green-700 text-white text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-2">
+                        <i data-lucide="plus" class="w-4 h-4"></i> Agregar Proyecto
+                    </button>
+                </div>
+            </div>
+
+        </div>
     </div>
-  </div>
-</div>
 
-<script>
-let filtroActual="Todos";
-let archivos={f:null,f2:null,f3:null};
-let categorias=[
-  {nombre:"Tecnología",icon:"💻"},
-  {nombre:"Alimentos",icon:"🍎"},
-  {nombre:"Bebidas",icon:"🥤"},
-  {nombre:"Hogar",icon:"🏠"},
-  {nombre:"Deportes",icon:"💪"},
-  {nombre:"Belleza",icon:"💄"},
-  {nombre:"Mascotas",icon:"🐾"},
-  {nombre:"Ofertas",icon:"🏷️"}
-];
+    <!-- MODAL: INTERACTIVE PREVIEW IFRAME -->
+    <div id="preview-modal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden flex flex-col p-2 sm:p-6">
+        <div class="bg-gray-900 border border-gray-800 rounded-2xl w-full h-full flex flex-col overflow-hidden shadow-2xl">
+            
+            <!-- MODAL NAVBAR -->
+            <div class="p-4 border-b border-gray-800 flex items-center justify-between bg-gray-950">
+                <div class="flex items-center space-x-3">
+                    <span id="preview-modal-title" class="font-bold text-white text-base sm:text-lg">Vista Previa</span>
+                    <a id="preview-modal-link" href="#" target="_blank" class="text-xs text-indigo-400 hover:underline flex items-center gap-1">
+                        <i data-lucide="external-link" class="w-3 h-3"></i> Abrir directo
+                    </a>
+                </div>
 
-function getProductos(){
-  return JSON.parse(localStorage.getItem('market3a')||'[]');
-}
+                <!-- VIEWPORT TOGGLER (DESKTOP / MOBILE) -->
+                <div class="flex items-center bg-gray-900 p-1 rounded-xl border border-gray-800">
+                    <button onclick="setViewport('desktop')" id="vp-desktop" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 text-white flex items-center gap-1.5 transition-all">
+                        <i data-lucide="monitor" class="w-4 h-4"></i> Desktop
+                    </button>
+                    <button onclick="setViewport('mobile')" id="vp-mobile" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-gray-400 hover:text-white flex items-center gap-1.5 transition-all">
+                        <i data-lucide="smartphone" class="w-4 h-4"></i> Mobile
+                    </button>
+                </div>
 
-function renderCats(){
-  let html=`<div class="cat ${filtroActual==='Todos'?'active':''}" onclick="filtrar('Todos')"><div class="cat-icon">🛒</div><b>Todos</b></div>`;
-  html+=categorias.map(cat=>`<div class="cat ${filtroActual===cat.nombre?'active':''}" onclick="filtrar('${cat.nombre}')"><div class="cat-icon">${cat.icon}</div><b>${cat.nombre}</b></div>`).join('');
-  document.getElementById('cats').innerHTML=html;
-  document.querySelectorAll('#menu button').forEach(b=>{
-    if(b.innerText===filtroActual || (filtroActual==='Todos' && b.innerText==='Todos')) b.classList.add('active'); else b.classList.remove('active');
-  });
-}
+                <button onclick="closePreviewModal()" class="text-gray-400 hover:text-white p-2">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
 
-function cambiarFoto(id, src){
-  document.getElementById(id).src=src;
-}
-
-function cargarFoto(input, key){
-  if(input.files && input.files[0]){
-    let reader=new FileReader();
-    reader.onload=function(e){
-      archivos[key]=e.target.result;
-      mostrarPreviewsArchivos();
-      actualizarVistaPrevia();
-    }
-    reader.readAsDataURL(input.files[0]);
-  }
-}
-
-function mostrarPreviewsArchivos(){
-  let html='';
-  if(archivos.f) html+=`<img src="${archivos.f}">`;
-  if(archivos.f2) html+=`<img src="${archivos.f2}">`;
-  if(archivos.f3) html+=`<img src="${archivos.f3}">`;
-  document.getElementById('filePreview').innerHTML=html;
-}
-
-function renderGrid(){
-  let todos=getProductos();
-  let filtrados = filtroActual==='Todos' ? todos : todos.filter(p=>p.c===filtroActual);
-  let texto=document.getElementById('buscador').value.toLowerCase();
-  if(texto){filtrados=filtrados.filter(p=>p.n.toLowerCase().includes(texto) || (p.d && p.d.toLowerCase().includes(texto)));}
-  document.getElementById('contador').innerText=filtrados.length+" productos encontrados"+(filtroActual!=='Todos' ? " en "+filtroActual : "");
-  if(filtrados.length===0){
-    document.getElementById('grid').innerHTML=`<div class="vacio"><h3>No hay productos todavía</h3><p>Entrá al panel con el engranaje y contraseña Santifina y subí tu primer producto por archivo. Aparecerá acá al instante.</p></div>`;
-  }else{
-    document.getElementById('grid').innerHTML=filtrados.map((p,i)=>{
-      let f2=p.f2||p.f;
-      let f3=p.f3||p.f;
-      return `<div class="card">
-        <img class="main" src="${p.f}" id="prod-${i}">
-        <div class="thumbs">
-          <img src="${p.f}" onclick="cambiarFoto('prod-${i}','${p.f}')">
-          <img src="${f2}" onclick="cambiarFoto('prod-${i}','${f2}')">
-          <img src="${f3}" onclick="cambiarFoto('prod-${i}','${f3}')">
+            <!-- IFRAME HOLDER -->
+            <div class="flex-grow bg-slate-950 flex items-center justify-center p-2 sm:p-4 overflow-hidden relative">
+                <div id="iframe-wrapper" class="w-full h-full transition-all duration-300 rounded-xl overflow-hidden border border-gray-800 shadow-2xl bg-white">
+                    <iframe id="preview-iframe" src="" class="w-full h-full border-0"></iframe>
+                </div>
+            </div>
         </div>
-        <span class="tag">${p.c}</span>
-        <h3>${p.n}</h3>
-        <p class="desc">${p.d||''}</p>
-        <div class="precio">$${p.pr}</div>
-        <div class="unidades">📦 ${p.u} unidades disponibles</div>
-        <button class="btn-carrito">Agregar al carrito</button>
-      </div>`;
-    }).join('');
-  }
-  renderCats();
-}
+    </div>
 
-function actualizarVistaPrevia(){
-  let n=document.getElementById('n').value || "Nombre del producto";
-  let pr=document.getElementById('pr').value || "0";
-  let d=document.getElementById('d').value || "Descripción del producto";
-  let u=document.getElementById('u').value || "0";
-  let c=document.getElementById('c').value;
-  let f=archivos.f || "https://via.placeholder.com/400x300?text=MARKET3A";
-  let f2=archivos.f2 || f;
-  let f3=archivos.f3 || f;
-  document.getElementById('vp-img').src=f;
-  document.getElementById('vp-nombre').innerText=n;
-  document.getElementById('vp-desc').innerText=d;
-  document.getElementById('vp-precio').innerText="$"+pr;
-  document.getElementById('vp-unidades').innerText="📦 "+u+" unidades disponibles";
-  document.getElementById('vp-cat').innerText=c;
-  document.getElementById('vp-thumbs').innerHTML=`<img src="${f}" onclick="document.getElementById('vp-img').src='${f}'"><img src="${f2}" onclick="document.getElementById('vp-img').src='${f2}'"><img src="${f3}" onclick="document.getElementById('vp-img').src='${f3}'">`;
-}
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // DEFAULT INITIAL PROJECTS LIST
+        const defaultProjects = [
+            {
+                id: '1',
+                title: 'Don Ramón Resto & Bar',
+                url: 'https://don-ramon.netlify.app',
+                category: 'gastronomia',
+                desc: 'Plataforma gastronómica interactiva con carta digital, promociones y reservas.',
+                tag: 'Restó & Bar'
+            },
+            {
+                id: '2',
+                title: 'Pizzería Tutti',
+                url: 'https://pizzeria-tutti.netlify.app',
+                category: 'gastronomia',
+                desc: 'Menú digital y pedidos directos de pizzas artesanales y empanadas.',
+                tag: 'Gastronomía'
+            },
+            {
+                id: '3',
+                title: 'Santi - Hamburguesería Artesanal',
+                url: 'https://finamoreraul-blip.github.io/Santi/',
+                category: 'gastronomia',
+                desc: 'Landing page gastronómica para combo de hamburguesas artesanales, papas y envíos.',
+                tag: 'Hamburguesería'
+            },
+            {
+                id: '4',
+                title: 'Coco - Heladería & Postres',
+                url: 'https://finamoreraul-blip.github.io/Coco/',
+                category: 'gastronomia',
+                desc: 'Catálogo de sabrosos helados artesanales, cucuruchos, paletas y postres helados.',
+                tag: 'Heladería'
+            },
+            {
+                id: '5',
+                title: 'PROMODELDIA-3A',
+                url: 'https://finamoreraul-blip.github.io/PROMODELDIA-3A/',
+                category: 'gastronomia',
+                desc: 'Portal de ofertas y promociones gastronómicas diarias en Tres Arroyos.',
+                tag: 'Promociones'
+            },
+            {
+                id: '6',
+                title: 'Salón de Recepciones & Eventos',
+                url: 'https://salonderecepciones.netlify.app',
+                category: 'servicios',
+                desc: 'Sitio institucional para reservas de salones, catering y organización de fiestas.',
+                tag: 'Eventos'
+            },
+            {
+                id: '7',
+                title: 'EsteticaX',
+                url: 'https://finamoreraul-blip.github.io/EsteticaX/',
+                category: 'servicios',
+                desc: 'Centro de estética, cuidado personal, belleza y gestión de turnos.',
+                tag: 'Salud & Belleza'
+            },
+            {
+                id: '8',
+                title: 'Inmobiliaria & Bienes Raíces',
+                url: 'https://inmobiliaria-demo.netlify.app',
+                category: 'inmobiliaria',
+                desc: 'Buscador de alquileres, ventas de propiedades y loteos.',
+                tag: 'Bienes Raíces'
+            },
+            {
+                id: '9',
+                title: 'web-inmobiliaria',
+                url: 'https://github.com/finamoreraul-blip/web-inmobiliaria',
+                category: 'inmobiliaria',
+                desc: 'Repositorio de desarrollo para plataforma inmobiliaria integral.',
+                tag: 'Inmobiliaria'
+            },
+            {
+                id: '10',
+                title: 'Todoenhilo',
+                url: 'https://finamoreraul-blip.github.io/Todoenhilo/',
+                category: 'comercio',
+                desc: 'Tienda de indumentaria, confección, hilos y blanquería.',
+                tag: 'Moda & Textil'
+            },
+            {
+                id: '11',
+                title: 'catalogo',
+                url: 'https://finamoreraul-blip.github.io/catalogo/',
+                category: 'comercio',
+                desc: 'Catálogo interactivo de productos con pedidos directos vía WhatsApp.',
+                tag: 'Catálogo'
+            },
+            {
+                id: '12',
+                title: 'tresa.exporta',
+                url: 'https://finamoreraul-blip.github.io/tresa.exporta/',
+                category: 'comercio',
+                desc: 'Portal de negocios y exportación para productores locales de Tres Arroyos.',
+                tag: 'Exportación'
+            },
+            {
+                id: '13',
+                title: 'auratools',
+                url: 'https://finamoreraul-blip.github.io/auratools/',
+                category: 'herramientas',
+                desc: 'Suite de herramientas digitales, utilidades y automatización web.',
+                tag: 'Herramientas'
+            },
+            {
+                id: '14',
+                title: 'clima-exacto',
+                url: 'https://finamoreraul-blip.github.io/clima-exacto/',
+                category: 'herramientas',
+                desc: 'Aplicación meteorológica interactiva con reporte en tiempo real.',
+                tag: 'Clima'
+            },
+            {
+                id: '15',
+                title: '3A VENDE',
+                url: 'https://share.google/brHfVgjZKXCNf9Ocw',
+                category: 'clasificados',
+                desc: 'Plataforma de compra, venta y clasificados locales de Tres Arroyos.',
+                tag: 'Marketplace'
+            }
+        ];
 
-function filtrar(cat){
-  filtroActual=cat;
-  document.querySelector('nav').classList.remove('active');
-  renderGrid();
-  document.getElementById('productos').scrollIntoView();
-}
+        // STATE APP MANAGEMENT
+        let projects = JSON.parse(localStorage.getItem('tresa_projects')) || defaultProjects;
+        let siteTitle = localStorage.getItem('tresa_site_title') || 'tresa web';
+        let siteDesc = localStorage.getItem('tresa_site_desc') || 'Desarrollo Web & Soluciones Digitales';
+        let currentCategory = 'all';
+        let isAdminLoggedIn = false;
 
-function abrir(){document.getElementById('modal').style.display='flex'; actualizarVistaPrevia();}
-function cerrar(){document.getElementById('modal').style.display='none'}
-function entrar(){
-  if(document.getElementById('pass').value==="Santifina"){
-    document.getElementById('loginDiv').style.display='none';
-    document.getElementById('panelDiv').style.display='block';
-    listarAdmin();
-    actualizarVistaPrevia();
-  } else {document.getElementById('err').innerText='Contraseña incorrecta'}
-}
-function guardar(){
-  let n=document.getElementById('n').value;
-  let pr=document.getElementById('pr').value;
-  if(!n || !pr){alert('Completá nombre y precio');return;}
-  if(!archivos.f){alert('Subí al menos la foto principal por archivo');return;}
-  let p={n:n,pr:pr,d:document.getElementById('d').value,u:document.getElementById('u').value,c:document.getElementById('c').value,f:archivos.f,f2:archivos.f2||archivos.f,f3:archivos.f3||archivos.f};
-  let t=getProductos();
-  t.push(p);
-  localStorage.setItem('market3a',JSON.stringify(t));
-  document.getElementById('n').value='';document.getElementById('pr').value='';document.getElementById('d').value='';document.getElementById('u').value='';
-  document.getElementById('fFile').value='';document.getElementById('f2File').value='';document.getElementById('f3File').value='';
-  archivos={f:null,f2:null,f3:null};
-  document.getElementById('filePreview').innerHTML='';
-  listarAdmin();
-  renderGrid();
-  actualizarVistaPrevia();
-  alert('Producto guardado y visible en MARKET3A');
-}
-function listarAdmin(){
-  let t=getProductos();
-  document.getElementById('tab').innerHTML=t.map((x,i)=>`<tr><td>${x.n}</td><td>$${x.pr}</td><td>${x.c}</td><td>${x.u}</td><td><button class="borrar" onclick="borrar(${i})">Borrar</button></td></tr>`).join('') || `<tr><td colspan="5">Todavía no subiste productos</td></tr>`;
-}
-function borrar(i){
-  let t=getProductos();
-  t.splice(i,1);
-  localStorage.setItem('market3a',JSON.stringify(t));
-  listarAdmin();
-  renderGrid();
-}
+        // INITIALIZE APP ON LOAD
+        document.addEventListener('DOMContentLoaded', () => {
+            renderHeaderInfo();
+            renderProjects();
+            updateLivePreview();
+            lucide.createIcons();
+        });
 
-renderGrid();
-actualizarVistaPrevia();
-</script>
+        function renderHeaderInfo() {
+            document.getElementById('site-title-display').childNodes[0].nodeValue = siteTitle + ' ';
+            document.getElementById('site-desc-display').innerText = siteDesc;
+            document.getElementById('edit-site-title').value = siteTitle;
+            document.getElementById('edit-site-desc').value = siteDesc;
+        }
+
+        // RENDER PROJECTS GRID
+        function renderProjects() {
+            const grid = document.getElementById('projects-grid');
+            grid.innerHTML = '';
+
+            const filtered = currentCategory === 'all' 
+                ? projects 
+                : projects.filter(p => p.category === currentCategory);
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full text-center py-16 bg-gray-900 border border-gray-800 rounded-2xl">
+                        <i data-lucide="folder-open" class="w-12 h-12 text-gray-600 mx-auto mb-3"></i>
+                        <p class="text-gray-400 font-semibold">No hay proyectos en esta sección aún.</p>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            filtered.forEach(p => {
+                const card = document.createElement('div');
+                card.className = "bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden hover:border-indigo-500/50 transition-all hover:shadow-xl hover:shadow-indigo-500/10 flex flex-col group";
+                
+                card.innerHTML = `
+                    <div class="p-5 flex flex-col flex-grow space-y-4">
+                        <div class="flex items-start justify-between gap-2">
+                            <span class="px-2.5 py-1 bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 text-xs font-bold rounded-lg uppercase tracking-wider">
+                                ${p.tag || p.category}
+                            </span>
+                            ${isAdminLoggedIn ? `
+                                <button onclick="deleteProject('${p.id}')" class="text-red-400 hover:text-red-300 p-1" title="Eliminar proyecto">
+                                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                </button>
+                            ` : ''}
+                        </div>
+
+                        <div>
+                            <h3 class="text-lg font-bold text-white group-hover:text-indigo-400 transition-colors">${p.title}</h3>
+                            <p class="text-xs text-gray-400 mt-1 line-clamp-2">${p.desc}</p>
+                        </div>
+
+                        <!-- EXPLICIT URL DISPLAY AS REQUESTED -->
+                        <div class="bg-gray-950 p-3 rounded-xl border border-gray-800/80 font-mono text-xs text-gray-300 break-all flex items-start gap-2">
+                            <i data-lucide="link" class="w-4 h-4 text-indigo-400 shrink-0 mt-0.5"></i>
+                            <div>
+                                <span class="text-indigo-400 font-sans font-bold">Aca el link:</span> 
+                                <a href="${p.url}" target="_blank" class="hover:underline text-gray-300">${p.url}</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="px-5 py-3.5 bg-gray-950/60 border-t border-gray-800/80 flex items-center justify-between">
+                        <button onclick="openPreviewModal('${p.url}', '${p.title}')" class="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl transition-all shadow-md flex items-center justify-center gap-2">
+                            <i data-lucide="eye" class="w-4 h-4"></i> Probador Vista Previa
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+
+            lucide.createIcons();
+        }
+
+        // SWITCH CATEGORIES
+        function switchCategory(cat) {
+            currentCategory = cat;
+            
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                btn.className = "cat-btn px-4 py-2 rounded-xl text-sm font-semibold transition-all bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white flex items-center gap-2";
+            });
+
+            const activeBtn = document.getElementById(`cat-btn-${cat}`);
+            if (activeBtn) {
+                if (cat === 'editor') {
+                    activeBtn.className = "cat-btn px-4 py-2 rounded-xl text-sm font-bold transition-all bg-amber-500 text-gray-950 shadow-lg shadow-amber-500/30 flex items-center gap-2 ml-auto";
+                } else {
+                    activeBtn.className = "cat-btn px-4 py-2 rounded-xl text-sm font-semibold transition-all bg-indigo-600 text-white shadow-lg shadow-indigo-600/30 flex items-center gap-2";
+                }
+            }
+
+            if (cat === 'editor') {
+                document.getElementById('portfolio-section').classList.add('hidden');
+                document.getElementById('editor-section').classList.remove('hidden');
+            } else {
+                document.getElementById('editor-section').classList.add('hidden');
+                document.getElementById('portfolio-section').classList.remove('hidden');
+                renderProjects();
+            }
+        }
+
+        // LIVE TEMPLATE EDITOR PREVIEW UPDATE
+        function updateLivePreview() {
+            const title = document.getElementById('tmpl-title').value || 'Tu Negocio';
+            const subtitle = document.getElementById('tmpl-subtitle').value || 'Eslogan de tu marca';
+            const desc = document.getElementById('tmpl-desc').value || 'Descripción del negocio...';
+            const color = document.getElementById('tmpl-color').value || '#f59e0b';
+            const whatsapp = document.getElementById('tmpl-whatsapp').value || '+5492983000000';
+            const location = document.getElementById('tmpl-location').value || 'Ubicación';
+            const services = document.getElementById('tmpl-services').value.split(',');
+
+            document.getElementById('tmpl-color-hex').innerText = color;
+
+            const container = document.getElementById('live-preview-container');
+            container.innerHTML = `
+                <div class="max-w-2xl mx-auto space-y-8 py-6 text-white font-sans">
+                    <!-- HERO PREVIEW -->
+                    <div class="text-center space-y-3 pb-6 border-b border-gray-800">
+                        <span class="px-3 py-1 text-xs font-bold rounded-full uppercase tracking-widest text-gray-950" style="background-color: ${color}">
+                            Sitio Web Oficial
+                        </span>
+                        <h1 class="text-3xl sm:text-4xl font-black tracking-tight" style="color: ${color}">${title}</h1>
+                        <p class="text-lg font-medium text-gray-300">${subtitle}</p>
+                        <p class="text-sm text-gray-400 max-w-lg mx-auto leading-relaxed">${desc}</p>
+                        
+                        <div class="pt-4 flex justify-center gap-3">
+                            <a href="https://wa.me/${whatsapp.replace(/[^0-9]/g, '')}" target="_blank" class="px-5 py-2.5 rounded-xl font-bold text-gray-950 text-sm shadow-lg flex items-center gap-2 transition-transform hover:scale-105" style="background-color: ${color}">
+                                💬 Contactar por WhatsApp
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- SERVICES PREVIEW -->
+                    <div class="space-y-4">
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 text-center">Nuestros Servicios / Productos</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            ${services.map(s => `
+                                <div class="bg-gray-900 border border-gray-800 p-3.5 rounded-xl flex items-center gap-3">
+                                    <div class="w-2 h-2 rounded-full shrink-0" style="background-color: ${color}"></div>
+                                    <span class="text-sm text-gray-200 font-medium">${s.trim()}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <!-- LOCATION PREVIEW -->
+                    <div class="bg-gray-900 border border-gray-800 p-4 rounded-xl flex items-center gap-3 text-sm text-gray-300">
+                        <i data-lucide="map-pin" class="w-5 h-5 shrink-0" style="color: ${color}"></i>
+                        <span>${location}</span>
+                    </div>
+                </div>
+            `;
+            lucide.createIcons();
+        }
+
+        // ADMIN ACCESS CONTROLLER
+        function openAdminAuth() {
+            document.getElementById('admin-modal').classList.remove('hidden');
+            if (isAdminLoggedIn) {
+                document.getElementById('admin-auth-form').classList.add('hidden');
+                document.getElementById('admin-dashboard').classList.remove('hidden');
+            } else {
+                document.getElementById('admin-auth-form').classList.remove('hidden');
+                document.getElementById('admin-dashboard').classList.add('hidden');
+            }
+        }
+
+        function closeAdminModal() {
+            document.getElementById('admin-modal').classList.add('hidden');
+        }
+
+        function verifyAdminPass() {
+            const input = document.getElementById('admin-pass-input').value;
+            if (input === 'EMMA') {
+                isAdminLoggedIn = true;
+                document.getElementById('admin-pass-input').value = '';
+                document.getElementById('admin-auth-form').classList.add('hidden');
+                document.getElementById('admin-dashboard').classList.remove('hidden');
+                renderProjects();
+            } else {
+                alert('Contraseña incorrecta.');
+            }
+        }
+
+        function logoutAdmin() {
+            isAdminLoggedIn = false;
+            closeAdminModal();
+            renderProjects();
+        }
+
+        function saveSiteMetadata() {
+            siteTitle = document.getElementById('edit-site-title').value;
+            siteDesc = document.getElementById('edit-site-desc').value;
+            localStorage.setItem('tresa_site_title', siteTitle);
+            localStorage.setItem('tresa_site_desc', siteDesc);
+            renderHeaderInfo();
+            alert('¡Encabezado guardado con éxito!');
+        }
+
+        function addNewProject() {
+            const title = document.getElementById('new-proj-title').value;
+            const url = document.getElementById('new-proj-url').value;
+            const category = document.getElementById('new-proj-cat').value;
+            const desc = document.getElementById('new-proj-desc').value;
+
+            if (!title || !url) {
+                alert('Por favor completa el título y la URL.');
+                return;
+            }
+
+            const newProj = {
+                id: Date.now().toString(),
+                title,
+                url,
+                category,
+                desc: desc || 'Sin descripción.',
+                tag: category.toUpperCase()
+            };
+
+            projects.unshift(newProj);
+            localStorage.setItem('tresa_projects', JSON.stringify(projects));
+            
+            // CLEAR FORM
+            document.getElementById('new-proj-title').value = '';
+            document.getElementById('new-proj-url').value = '';
+            document.getElementById('new-proj-desc').value = '';
+
+            renderProjects();
+            alert('¡Proyecto agregado!');
+        }
+
+        function deleteProject(id) {
+            if (confirm('¿Deseas eliminar este proyecto?')) {
+                projects = projects.filter(p => p.id !== id);
+                localStorage.setItem('tresa_projects', JSON.stringify(projects));
+                renderProjects();
+            }
+        }
+
+        // PREVIEW MODAL FUNCTIONS
+        function openPreviewModal(url, title) {
+            const modal = document.getElementById('preview-modal');
+            const iframe = document.getElementById('preview-iframe');
+            const modalTitle = document.getElementById('preview-modal-title');
+            const modalLink = document.getElementById('preview-modal-link');
+
+            modalTitle.innerText = title;
+            modalLink.href = url;
+            iframe.src = url;
+
+            setViewport('desktop');
+            modal.classList.remove('hidden');
+        }
+
+        function closePreviewModal() {
+            const modal = document.getElementById('preview-modal');
+            const iframe = document.getElementById('preview-iframe');
+            iframe.src = '';
+            modal.classList.add('hidden');
+        }
+
+        function setViewport(mode) {
+            const wrapper = document.getElementById('iframe-wrapper');
+            const vpDesktop = document.getElementById('vp-desktop');
+            const vpMobile = document.getElementById('vp-mobile');
+
+            if (mode === 'mobile') {
+                wrapper.className = "w-[375px] h-[667px] transition-all duration-300 rounded-3xl overflow-hidden border-8 border-gray-800 shadow-2xl bg-white mx-auto";
+                vpMobile.className = "px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 text-white flex items-center gap-1.5 transition-all";
+                vpDesktop.className = "px-3 py-1.5 rounded-lg text-xs font-semibold text-gray-400 hover:text-white flex items-center gap-1.5 transition-all";
+            } else {
+                wrapper.className = "w-full h-full transition-all duration-300 rounded-xl overflow-hidden border border-gray-800 shadow-2xl bg-white";
+                vpDesktop.className = "px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 text-white flex items-center gap-1.5 transition-all";
+                vpMobile.className = "px-3 py-1.5 rounded-lg text-xs font-semibold text-gray-400 hover:text-white flex items-center gap-1.5 transition-all";
+            }
+        }
+
+        function exportCustomSite() {
+            alert('¡Diseño personalizado listo! Puedes enviar los datos configurados al desarrollador.');
+        }
+    </script>
 </body>
-  </html>
+                      </html>
